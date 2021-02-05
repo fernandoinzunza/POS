@@ -1,0 +1,36 @@
+﻿<Page
+    x:Class="POS.Views.NewProvider"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:POS.ViewModels"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.DataContext>
+        <local:ProviderViewModel></local:ProviderViewModel>
+    </Page.DataContext>
+    <Grid RowSpacing="10" Margin="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <TextBlock FontSize="24" FontWeight="SemiBold" FontFamily="Arial" Grid.Row="0">Agregar Proveedor</TextBlock>
+        <TextBox Header="Nombre del proveedor:" FontFamily="Arial" BorderBrush="Gray" Text="{Binding Nombre, Mode=TwoWay}" BorderThickness="2" CornerRadius="0" Grid.Row="1"  PlaceholderText="Nombre"></TextBox>
+        <TextBox Header="Razon social" FontFamily="Arial" BorderBrush="Gray" Text="{Binding RazonSocial, Mode=TwoWay}" BorderThickness="2" CornerRadius="0" Grid.Row="2"  PlaceholderText="Razon social"></TextBox>
+        <TextBox Header="RFC:" FontFamily="Arial"  BorderBrush="Gray" Text="{Binding Rfc, Mode=TwoWay}" BorderThickness="2" CornerRadius="0" Grid.Row="3"  PlaceholderText="RFC"></TextBox>
+        <TextBox Header="Nombre de contacto:" FontFamily="Arial"  BorderBrush="Gray" Text="{Binding Contacto,Mode=TwoWay}" BorderThickness="2" CornerRadius="0" Grid.Row="4"   PlaceholderText="Contacto"></TextBox>
+        <TextBox Header="Telefono de contacto:" FontFamily="Arial"  BorderBrush="Gray" Text="{Binding Telefono, Mode=TwoWay}" BorderThickness="2" CornerRadius="0" Grid.Row="5"   PlaceholderText="Telefono"></TextBox>
+        <TextBox Header="Correo electronico:" FontFamily="Arial"  BorderBrush="Gray" Text="{Binding Correo, Mode=TwoWay}" BorderThickness="2" CornerRadius="0" Grid.Row="6"   PlaceholderText="Correo electronico"></TextBox>
+        <Button Content="Agregar" Command="{Binding AgregarProveedor}" HorizontalAlignment="Stretch"  Grid.Row="7" Background="#0377fc" Foreground="White"></Button>
+    </Grid>
+</Page>

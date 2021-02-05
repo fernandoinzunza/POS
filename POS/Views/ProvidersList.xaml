@@ -1,0 +1,65 @@
+﻿<Page
+    x:Class="POS.Views.ProvidersList"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:POS.ViewModels"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <ScrollViewer>
+        <StackPanel>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Row="0" Grid.Column="0">
+                    <TextBlock FontFamily="Arial"  FontSize="17">Lista de proveedores</TextBlock>
+                    <TextBlock FontFamily="Arial" Foreground="DarkGray" FontSize="10">Puede buscar por cualquier columna de la tabla</TextBlock>
+                </StackPanel>
+                <TextBox FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0"  PlaceholderText="Buscar" Grid.Row="0" Grid.Column="1">
+                </TextBox>
+            </Grid>
+
+            <controls:DataGrid FontFamily="Arial" HorizontalScrollBarVisibility="Auto" Margin="0 40 0 0" AlternatingRowBackground="LightGray" AutoGenerateColumns="False" x:Name="dataGrid" ItemsSource="{Binding Proveedores}">
+                <controls:DataGrid.Columns>
+                    <controls:DataGridTextColumn Header="Id" IsReadOnly="True"  Binding="{Binding Id}">
+                    </controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn Header="Nombre" Binding="{Binding Nombre}">
+                    </controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn Header="Razon Social" Binding="{Binding RazonSocial}">
+                    </controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn Header="RFC" Binding="{Binding Rfc}">
+                    </controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn Header="Nombre de contacto" Binding="{Binding Contacto}">
+                    </controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn Header="Telefono" Binding="{Binding Telefono}">
+                    </controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn Header="Correo" Binding="{Binding Correo}">
+                    </controls:DataGridTextColumn>
+                   
+                    <controls:DataGridTemplateColumn Header="Accion">
+                        <controls:DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <Button Content="Eliminar" Background="Red" Margin="4" HorizontalAlignment="Stretch" FontSize="10" Foreground="White" Command="{Binding Eliminar}" CommandParameter="{Binding}"/>
+                            </DataTemplate>
+                        </controls:DataGridTemplateColumn.CellEditingTemplate>
+                    </controls:DataGridTemplateColumn>
+                    <controls:DataGridTemplateColumn Header="Accion">
+                        <controls:DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <Button Content="Editar"  Background="Blue" HorizontalAlignment="Stretch"  Margin="4" FontSize="10" Foreground="White" Command="{Binding Editar}" CommandParameter="{Binding}"/>
+                            </DataTemplate>
+                        </controls:DataGridTemplateColumn.CellEditingTemplate>
+                    </controls:DataGridTemplateColumn>
+                </controls:DataGrid.Columns>
+            </controls:DataGrid>
+
+        </StackPanel>
+    </ScrollViewer>
+</Page>

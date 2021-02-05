@@ -1,0 +1,103 @@
+﻿<Page
+    x:Class="POS.Views.NewArticle"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:winui="using:Microsoft.UI.Xaml.Controls"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:local="using:POS.ViewModels"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    x:Name="window"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" d:DesignWidth="1919.89" d:DesignHeight="1360.958">
+    <Page.DataContext>
+        <local:NewArticleViewModel></local:NewArticleViewModel>
+    </Page.DataContext>
+
+    <ScrollViewer >
+        <StackPanel >
+            <controls:HeaderedContentControl FontFamily="Arial" FontSize="20" Margin="100 20 100 20" Header="Añadir articulo"></controls:HeaderedContentControl>
+            <Grid Margin="100 20 100 0">
+                <Grid  RowSpacing="20"  ColumnSpacing="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition  Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Header="Clave del producto:" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Text="{Binding TxtClave, Mode=TwoWay}" Grid.Row="0"  Grid.Column="0" PlaceholderText="Clave"></TextBox>
+                    <TextBox Header="Agrega una descripcion:" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Text="{Binding TxtDescripcion, Mode=TwoWay}" Grid.Row="0" MinWidth="200" Grid.Column="1" PlaceholderText="Descripcion"></TextBox>
+                    <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal" Grid.ColumnSpan="2" Grid.Row="2" Spacing="20" Grid.Column="0">
+                        <CheckBox BorderBrush="Gray" BorderThickness="2" CornerRadius="0" FontFamily="Arial" Command="{Binding CheckOld}" IsChecked="{Binding NewSection}" Content="Nuevo departamento?" FontSize="12"></CheckBox>
+                        <TextBox Header="Agrega un nuevo departamento:" HorizontalAlignment="Stretch" Width="500" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" IsEnabled="{Binding NewSection}" Text="{Binding TxtDepartamento, Mode=TwoWay}"   PlaceholderText="Nuevo departamento"></TextBox>
+                    </StackPanel>
+                    <ComboBox Header="Departamentos existentes:" Grid.ColumnSpan="2" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" IsEnabled="{Binding OldSection}" SelectedItem="{Binding ComboDepartamentos, Mode=TwoWay}"   ItemsSource="{Binding Departamentos}"  Grid.Row="3" HorizontalAlignment="Stretch" PlaceholderText="Departamento" Grid.Column="0">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Id}" Visibility="Collapsed"></TextBlock>
+                                    <TextBlock Text="{Binding Nombre}"></TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    
+                    <StackPanel Grid.Row="4" Grid.Column="0">
+                        <TextBlock FontFamily="Arial" Text="Selecciona los precios que necesites"></TextBlock>
+                        <CheckBox FontFamily="Arial"  x:Name="Option1CheckBox" Content="Precio al publico" IsChecked="true" IsEnabled="False" Margin="24,0,0,0" 
+             />
+                        <CheckBox FontFamily="Arial" Command="{Binding CheckClick}" x:Name="Option2CheckBox" Content="Precio secundario" Margin="24,0,0,0" 
+              />
+                        <CheckBox FontFamily="Arial" Command="{Binding Check3Click}" x:Name="Option4CheckBox" Content="Precio por mayoreo" Margin="24,0,0,0"
+               />
+
+                    </StackPanel>
+                    <StackPanel Spacing="10" Grid.Row="4" Grid.Column="1">
+                        <StackPanel Orientation="Horizontal">
+                            <ComboBox HorizontalAlignment="Stretch" BorderBrush="Gray" BorderThickness="2" FontFamily="Arial" CornerRadius="0" SelectedValuePath="Content" SelectedValue="{Binding ComboTipos, Mode=TwoWay}"  Header="Que tipo de unidad es?">
+                                <ComboBoxItem Content="Unidad de peso"></ComboBoxItem>
+                                <ComboBoxItem Content="Unidad de distancia"></ComboBoxItem>
+                                <ComboBoxItem Content="Unidad por pieza"></ComboBoxItem>
+                                <ComboBoxItem Content="Unidad de volumen"></ComboBoxItem>
+                            </ComboBox>
+                        </StackPanel>
+                        <ComboBox Header="Selecciona la unidad de medida a vender:" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" SelectedItem="{Binding ComboUnidad, Mode=TwoWay}" ItemsSource="{Binding UnidadesPorTipo}" PlaceholderText="Unidad" HorizontalAlignment="Stretch">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Nombre}"></TextBlock>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Margin="20 20 20 20" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">
+                        <winui:NumberBox FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Value="{Binding TxtPrecioPublico, Mode=TwoWay}" Minimum="0" Header="Precio al publico"  SmallChange="1" LargeChange="100" SpinButtonPlacementMode="Inline" Grid.Row="4" Grid.Column="0" PlaceholderText="Precio al publico"></winui:NumberBox>
+                        <winui:NumberBox FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Minimum="0" IsEnabled="{Binding CheckBox1}" SmallChange="1" LargeChange="100" SpinButtonPlacementMode="Inline" Grid.Row="2" Grid.Column="1" Header="Precio secundario" Value="{Binding TxtPrecioSecundario, Mode=TwoWay}"></winui:NumberBox>
+                        <winui:NumberBox FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Minimum="0" IsEnabled="{Binding CheckBox3}" SmallChange="1" LargeChange="100" SpinButtonPlacementMode="Inline" Grid.Row="2" Grid.Column="1" Header="Precio al mayoreo" Value="{Binding TxtPrecioMayoreo, Mode=TwoWay}"></winui:NumberBox>
+                        <winui:NumberBox FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Minimum="0" SmallChange="1" LargeChange="100" SpinButtonPlacementMode="Inline" Grid.Row="2" Grid.Column="1" Header="Considerar stock bajo en:" Value="{Binding StockBajo, Mode=TwoWay}"></winui:NumberBox>
+                    </StackPanel>
+                    <Button Background="#0067b8" Foreground="white" FontFamily="Arial" Command="{Binding AddArticle}"  Margin="40 0 40 0"  HorizontalAlignment="Stretch" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2">Agregar</Button>
+                </Grid>
+                <controls:Loading  x:Name="LoadPbar" IsLoading="{Binding IsBusy}" Margin="100 20 100 100" Opacity="0.8" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Background="LightGray">
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="12" >
+                        <TextBlock Opacity="0.9" Text="Guardando... Por favor, espera" Foreground="Black" VerticalAlignment="Center" />
+                        <Grid Height="134" Width="76" Opacity="0.9">
+                            <ProgressBar IsIndeterminate="True" Width="200" Foreground="Blue" />
+                        </Grid>
+                    </StackPanel>
+                </controls:Loading>
+            </Grid>
+            
+        </StackPanel>
+    </ScrollViewer>
+    
+</Page>

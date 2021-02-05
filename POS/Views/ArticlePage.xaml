@@ -1,0 +1,52 @@
+﻿<Page
+    x:Class="POS.Views.ArticlePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:POS.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:extensions="using:Microsoft.Toolkit.Uwp.UI.Extensions"
+    xmlns:controls="using:Microsoft.UI.Xaml.Controls"
+    extensions:ApplicationViewExtensions.ExtendViewIntoTitleBar="True"
+    extensions:TitleBarExtensions.BackgroundColor="Transparent">
+
+    <Grid>
+        <controls:NavigationView  Grid.Row="0" IsBackButtonVisible="Auto" IsTitleBarAutoPaddingEnabled="False" IsBackEnabled="True" PaneDisplayMode="Left" BackRequested="NavigationView_BackRequested" IsSettingsVisible="False"  SelectionChanged="NavigationView_SelectionChanged">
+            <controls:NavigationView.Resources>
+                <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="#0377fc"/>
+                <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="#0377fc" />
+                <SolidColorBrush x:Key="NavigationViewItemForeground" Color="White"/>
+                <SolidColorBrush x:Key="NavigationViewItemForegroundSelected" Color="White"/>
+                <SolidColorBrush x:Key="NavigationViewItemForegroundPointerOver" Color="White"/>
+                <SolidColorBrush Color="#73aff5" x:Key="NavigationViewItemBackgroundSelected"/>
+                <SolidColorBrush x:Key="NavigationViewItemBackgroundPointerOver" Color="#4790e6"/>
+                <SolidColorBrush x:Key="NavigationViewItemForegroundSelectedPointerOver" Color="White"/>
+            </controls:NavigationView.Resources>
+        <controls:NavigationView.MenuItems>
+                <controls:NavigationViewItem Icon="Shop" Content="Articulos" Tag="">
+                    <controls:NavigationViewItem.MenuItems>
+                        <controls:NavigationViewItem Content="Nuevo" Icon="Add" Tag="NewArticle"/>
+                        <controls:NavigationViewItem Content="Buscar" Icon="Find" Tag="ArticleList"/>
+                    </controls:NavigationViewItem.MenuItems>
+                </controls:NavigationViewItem>
+                <controls:NavigationViewItem Icon="Tag" Content="Unidades de medida" Tag="">
+                    <controls:NavigationViewItem.MenuItems>
+                        <controls:NavigationViewItem Content="Nueva unidad" Icon="Add" Tag="NewMeasureUnity"/>
+                        <controls:NavigationViewItem Content="Lista de unidades" Icon="Find" Tag="ArticleList"/>
+                    </controls:NavigationViewItem.MenuItems>
+                </controls:NavigationViewItem>
+                <controls:NavigationViewItem Content="Departamentos" Icon="Bookmarks" Tag="DepartmentView"/>
+                <controls:NavigationViewItem Content="Descuentos" Icon="Favorite" Tag="Discounts"/>
+            </controls:NavigationView.MenuItems>
+            <Frame  HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="contentFrame" FontSize="20" Content="Haz click en una pestaña para cambiar de pantalla"/>
+        </controls:NavigationView>
+        <Grid Height="32" VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="32"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid x:Name="DragGrid" Grid.Column="1">
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>

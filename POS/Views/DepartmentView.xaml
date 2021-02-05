@@ -1,0 +1,41 @@
+﻿<Page
+    x:Class="POS.Views.DepartmentView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:POS.ViewModels"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+   x:Name="window"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.DataContext>
+        <local:DepartmentViewModel></local:DepartmentViewModel>
+    </Page.DataContext>
+
+    <StackPanel Margin="40">
+        <controls:HeaderedContentControl FontFamily="Arial" Orientation="Vertical" Header="Departamentos"></controls:HeaderedContentControl>
+        <controls:DataGrid  FontFamily="Arial" Margin="20"  AutoGenerateColumns="False"  SelectedItem="{Binding Path=SelectedRow, Mode=TwoWay}"   IsReadOnly="True" ColumnWidth="*" x:Name="dataGridDep" ItemsSource="{Binding ArticulosDep}">
+            <controls:DataGrid.Columns>
+                <controls:DataGridTextColumn FontSize="20" Header="Nombre" Binding="{Binding Path=Key}">
+                    
+                </controls:DataGridTextColumn>
+            </controls:DataGrid.Columns>
+            <controls:DataGrid.RowDetailsTemplate>
+                
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock FontSize="14" FontWeight="SemiBold" Margin="10 10 10 10">Articulos que pertenecen a este departamento: </TextBlock>
+                        <ListView FontFamily="Arial" ItemsSource="{Binding Path=Value}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontSize="10" Text="{Binding Descripcion}"></TextBlock>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackPanel>
+                </DataTemplate>
+            </controls:DataGrid.RowDetailsTemplate>
+        </controls:DataGrid>
+    </StackPanel>
+</Page>

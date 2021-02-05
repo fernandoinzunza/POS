@@ -1,0 +1,124 @@
+﻿<Page
+    x:Class="POS.Views.StartPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:POS.ViewModels"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    FontFamily="Arial"
+    
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <ScrollViewer>
+        <Grid Margin="200 100 200 50">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition ></RowDefinition>
+                <RowDefinition ></RowDefinition>
+
+            </Grid.RowDefinitions>
+
+            <Button Command="{Binding InventoryPage}"  FontSize="30" Background="white" Foreground="SkyBlue"  Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" Height="300">
+                <Grid ColumnSpacing="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0"><Run Text="&#xE713;" FontSize="70" FontFamily="Segoe MDL2 Assets" /></TextBlock>
+                    <StackPanel Grid.Row="0" Grid.Column="1">
+                        <TextBlock FontSize="16" Foreground="Black">Inventario</TextBlock>
+                        <TextBlock  FontSize="12" Foreground="Gray" TextWrapping="Wrap" >Entradas, salidas de inventario, reportes</TextBlock>
+                    </StackPanel>
+                </Grid>
+            </Button>
+            <Button  FontSize="30" Background="white" Foreground="SkyBlue"  Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" Height="300">
+                <Grid ColumnSpacing="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0"><Run Text="&#xEC59;" FontSize="70" FontFamily="Segoe MDL2 Assets" /></TextBlock>
+                    <StackPanel Grid.Row="0" Grid.Column="1">
+                        <TextBlock FontSize="16" Foreground="Black">Ventana de cobro</TextBlock>
+                        <TextBlock  FontSize="12" Foreground="Gray" TextWrapping="Wrap" >Realizar una venta, facturar</TextBlock>
+                    </StackPanel>
+                </Grid>
+            </Button>
+            <Button  FontSize="30" Background="white" Foreground="SkyBlue"  Grid.Row="0" Grid.Column="2" HorizontalAlignment="Stretch" Height="300">
+                <Grid ColumnSpacing="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0"><Run Text="&#xE9D9;" FontSize="70" FontFamily="Segoe MDL2 Assets" /></TextBlock>
+                    <StackPanel Grid.Row="0" Grid.Column="1">
+                        <TextBlock FontSize="16" Foreground="Black">Ventas</TextBlock>
+                        <TextBlock  FontSize="12" Foreground="Gray" TextWrapping="Wrap" >Reportes de ventas, listado de ventas</TextBlock>
+                    </StackPanel>
+                </Grid>
+            </Button>
+            <Button  Command="{Binding ProviderPage}" FontSize="30" Background="white" Foreground="SkyBlue"  Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" Height="300">
+                <Grid ColumnSpacing="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0"><Run Text="&#xEADF;" FontSize="70" FontFamily="Segoe MDL2 Assets" /></TextBlock>
+                    <StackPanel Grid.Row="0" Grid.Column="1">
+                        <TextBlock FontSize="16" Foreground="Black">Proveedores</TextBlock>
+                        <TextBlock  FontSize="12" Foreground="Gray" TextWrapping="Wrap" >Catalogo de proveedores, reportes</TextBlock>
+                    </StackPanel>
+                </Grid>
+            </Button>
+            <Button  Command="{Binding NavigationCommand}"  FontSize="30" Background="white" Foreground="SkyBlue"  Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" Height="300">
+                <Grid ColumnSpacing="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0"><Run Text="&#xE7B8;" FontSize="70" FontFamily="Segoe MDL2 Assets" /></TextBlock>
+                    <StackPanel Grid.Row="0" Grid.Column="1">
+                        <TextBlock FontSize="16" Foreground="Black">Articulos</TextBlock>
+                        <TextBlock  FontSize="12" Foreground="Gray" TextWrapping="Wrap" >Alta, modificacion, consulta y reportes</TextBlock>
+                    </StackPanel>
+
+                </Grid>
+            </Button>
+            <Button  FontSize="30" Background="white" Foreground="SkyBlue"  Grid.Row="1" Grid.Column="2" HorizontalAlignment="Stretch" Height="300">
+                <Grid ColumnSpacing="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0"><Run Text="&#xEF40;" FontSize="70" FontFamily="Segoe MDL2 Assets" /></TextBlock>
+                    <StackPanel Grid.Row="0" Grid.Column="1">
+                        <TextBlock FontSize="16" Foreground="Black">Metodos de pago</TextBlock>
+                        <TextBlock  FontSize="12" Foreground="Gray" TextWrapping="Wrap" >TIpo de cambio, tarjetas de credito o debito</TextBlock>
+                    </StackPanel>
+                </Grid>
+            </Button>
+        </Grid>
+    </ScrollViewer>
+</Page>

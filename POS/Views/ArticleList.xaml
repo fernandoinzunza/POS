@@ -1,0 +1,80 @@
+﻿<Page
+    x:Class="POS.Views.ArticleList"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:POS.ViewModels"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:i="using:Microsoft.Xaml.Interactivity"
+    xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
+    x:Name="window"   
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.DataContext>
+        <local:ArticleListViewModel></local:ArticleListViewModel>
+    </Page.DataContext>
+    <Page.Resources>
+        <local:ArticleListViewModel x:Key="vm"></local:ArticleListViewModel>
+    </Page.Resources>
+    <ScrollViewer>
+        <StackPanel>
+            <Grid Margin="40">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Row="0" Grid.Column="0">
+                    <TextBlock FontFamily="Arial"  FontSize="17">Lista de articulos</TextBlock>
+                    <TextBlock FontFamily="Arial" Foreground="DarkGray" FontSize="10">Puede buscar por cualquier columna de la tabla</TextBlock>
+                </StackPanel>
+                <TextBox FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" KeyUp="TextBox_KeyUp" PlaceholderText="Buscar" Grid.Row="0" Grid.Column="1" DataContext="{StaticResource vm}" Text="{Binding TxtBuscar,Mode=TwoWay}">
+                </TextBox>
+            </Grid>
+
+            <controls:DataGrid FontFamily="Arial" AlternatingRowBackground="LightGray" Margin="40" DataContext="{StaticResource vm}" AutoGenerateColumns="False" x:Name="dataGrid" ItemsSource="{Binding Articulos}">
+                <controls:DataGrid.Columns>
+                    <controls:DataGridTextColumn Header="Clave" IsReadOnly="True"  Binding="{Binding Clave}">
+                    </controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn Header="Descripcion" Binding="{Binding Descripcion}">
+                    </controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn Header="Departamento" Binding="{Binding Departamento}">
+                    </controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn Header="Proveedor" Binding="{Binding NombreProveedor}">
+                    </controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn IsReadOnly="True" Header="Stock" Binding="{Binding Stock}">
+                    </controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn Header="Unidad" Binding="{Binding Unidad}">
+                    </controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn Header="Precio publico" Binding="{Binding PrecioPublico}">
+                    </controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn Header="Precio secundario" Binding="{Binding PrecioSecundario}">
+                    </controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn Header="Precio al mayoreo" Binding="{Binding PrecioMayoreo}">
+                    </controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn Header="Precio al costo" Binding="{Binding PrecioAlCosto}">
+                    </controls:DataGridTextColumn>
+                    <controls:DataGridTemplateColumn Header="Accion">
+                        <controls:DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <Button Content="Eliminar" Background="Red" Margin="4" HorizontalAlignment="Stretch" FontSize="10" Foreground="White" Command="{Binding Eliminar, Source={StaticResource vm}}" CommandParameter="{Binding}"/>
+                            </DataTemplate>
+                        </controls:DataGridTemplateColumn.CellEditingTemplate>
+                    </controls:DataGridTemplateColumn>
+                    <controls:DataGridTemplateColumn Header="Accion">
+                        <controls:DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <Button Content="Editar"  Background="Blue" HorizontalAlignment="Stretch"  Margin="4" FontSize="10" Foreground="White" Command="{Binding Editar, Source={StaticResource vm}}" CommandParameter="{Binding}"/>
+                            </DataTemplate>
+                        </controls:DataGridTemplateColumn.CellEditingTemplate>
+                    </controls:DataGridTemplateColumn>
+                </controls:DataGrid.Columns>
+            </controls:DataGrid>
+
+        </StackPanel>
+    </ScrollViewer>
+
+</Page>

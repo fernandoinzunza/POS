@@ -1,0 +1,80 @@
+﻿<Page
+    x:Class="POS.Views.InventoryStocks"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:POS.ViewModels"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <ScrollViewer>
+        <StackPanel>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Row="0" Grid.Column="0">
+                    <TextBlock FontFamily="Arial"  FontSize="17">Lista de articulos</TextBlock>
+                    <TextBlock FontFamily="Arial" Foreground="DarkGray" FontSize="10">Puede buscar por cualquier columna de la tabla</TextBlock>
+                </StackPanel>
+                
+            </Grid>
+
+            <controls:DataGrid FontFamily="Arial" AlternatingRowBackground="LightGray" AutoGenerateColumns="False" x:Name="dataGrid" ItemsSource="{Binding Colores}">
+                <controls:DataGrid.Columns>
+                    <controls:DataGridTemplateColumn
+                    Header="Name"
+                    Width="SizeToHeader">
+
+                        <controls:DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate >
+                                <Border Background="{Binding Value}">
+                                    <TextBlock Text="{Binding Key.Clave}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </DataTemplate>
+                        </controls:DataGridTemplateColumn.CellTemplate>
+
+                    </controls:DataGridTemplateColumn>
+                    <controls:DataGridTextColumn Header="Descripcion" Binding="{Binding Key.Descripcion}">
+                    </controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn Header="Departamento" Binding="{Binding Key.Departamento}">
+                    </controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn Header="Proveedor" Binding="{Binding Key.NombreProveedor}">
+                    </controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn Header="Stock" Binding="{Binding Key.Stock}">
+                    </controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn Header="Unidad" Binding="{Binding Key.Unidad}">
+                    </controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn Header="Precio publico" Binding="{Binding Key.PrecioPublico}">
+                    </controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn Header="Precio secundario" Binding="{Binding Key.PrecioSecundario}">
+                    </controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn Header="Precio al mayoreo" Binding="{Binding Key.PrecioMayoreo}">
+                    </controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn Header="Precio al costo" Binding="{Binding Key.PrecioAlCosto}">
+                    </controls:DataGridTextColumn>
+                    <controls:DataGridTemplateColumn Header="Accion">
+                        <controls:DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <Button Content="Eliminar" Background="Red" Margin="4" HorizontalAlignment="Stretch" FontSize="10" Foreground="White"/>
+                            </DataTemplate>
+                        </controls:DataGridTemplateColumn.CellEditingTemplate>
+                    </controls:DataGridTemplateColumn>
+                    <controls:DataGridTemplateColumn Header="Accion">
+                        <controls:DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <Button Content="Editar"  Background="Blue" HorizontalAlignment="Stretch"  Margin="4" FontSize="10" Foreground="White"/>
+                            </DataTemplate>
+                        </controls:DataGridTemplateColumn.CellEditingTemplate>
+                    </controls:DataGridTemplateColumn>
+                </controls:DataGrid.Columns>
+            </controls:DataGrid>
+
+        </StackPanel>
+    </ScrollViewer>
+</Page>

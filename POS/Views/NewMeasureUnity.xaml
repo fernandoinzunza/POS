@@ -1,0 +1,22 @@
+﻿<Page
+    x:Class="POS.Views.NewMeasureUnity"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:POS.ViewModels"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid>
+        <StackPanel VerticalAlignment="Center" Margin="100 0 100 20" Spacing="10">
+            <ComboBox BorderBrush="Gray" BorderThickness="2" FontFamily="Arial" CornerRadius="0" SelectedValuePath="Content" SelectedValue="{Binding ComboTipos, Mode=TwoWay}" Margin="80 0 80 0" HorizontalAlignment="Stretch" Header="Que tipo de unidad es?">
+                <ComboBoxItem Content="Unidad de peso"></ComboBoxItem>
+                <ComboBoxItem Content="Unidad de distancia"></ComboBoxItem>
+                <ComboBoxItem Content="Unidad por pieza"></ComboBoxItem>
+                <ComboBoxItem Content="Unidad de volumen"></ComboBoxItem>
+            </ComboBox>
+            <TextBox Text="{Binding Nombre,Mode=TwoWay}" Margin="80 0 80 0" FontFamily="Arial" Header="Agrega el nombre de la unidad:" BorderBrush="Gray" CornerRadius="0" BorderThickness="2" PlaceholderText="Unidad"></TextBox>
+            <Button Command="{Binding AgregarMedida}" Foreground="White" Background="#0377fc" Content="Agregar" HorizontalAlignment="Stretch" Margin="80 0 80 0"></Button>
+        </StackPanel>
+    </Grid>
+</Page>
