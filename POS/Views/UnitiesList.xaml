@@ -1,0 +1,61 @@
+﻿<Page
+    x:Class="POS.Views.UnitiesList"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:POS.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    mc:Ignorable="d"
+    
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <ScrollViewer>
+            <StackPanel>
+                <Grid Margin="40">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Row="0" Grid.Column="0">
+                        <TextBlock FontFamily="Arial"  FontSize="17">Unidades de medida registradas</TextBlock>
+                        <TextBlock FontFamily="Arial" Foreground="DarkGray" FontSize="10">Puede buscar por cualquier columna de la tabla</TextBlock>
+                    </StackPanel>
+                    <TextBox FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" KeyUp="TextBox_KeyUp" PlaceholderText="Buscar" Grid.Row="0" Grid.Column="1" >
+                    </TextBox>
+                </Grid>
+
+                <controls:DataGrid  SelectionChanged="dataGrid_SelectionChanged" BorderBrush="Gray" ColumnWidth="*" CurrentCellChanged="dataGrid_CurrentCellChanged" BorderThickness="2" GridLinesVisibility="All" FontFamily="Arial" AlternatingRowBackground="LightGray" Margin="40"  AutoGenerateColumns="False" x:Name="dataGrid" ItemsSource="{Binding Unidades}">
+                    <controls:DataGrid.Columns>
+                        <controls:DataGridTextColumn  Header="Identificador" IsReadOnly="True"  Binding="{Binding Id}">
+                        </controls:DataGridTextColumn>
+                        <controls:DataGridComboBoxColumn Binding="{Binding TipoUnidad}" ItemsSource="{x:Bind list}" >
+                         </controls:DataGridComboBoxColumn>
+                        
+                        <controls:DataGridTextColumn Header="Nombre" Binding="{Binding Nombre}">
+                        </controls:DataGridTextColumn>
+                        <controls:DataGridTemplateColumn Header="Accion">
+                            <controls:DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <Button Click="Button_Click_1" Content="Eliminar" Background="Red" Margin="4" HorizontalAlignment="Stretch" FontSize="10" Foreground="White"/>
+                                </DataTemplate>
+                            </controls:DataGridTemplateColumn.CellEditingTemplate>
+                        </controls:DataGridTemplateColumn>
+                        <controls:DataGridTemplateColumn Header="Accion">
+                            <controls:DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <Button Content="Editar"  Background="#0377fc" HorizontalAlignment="Stretch"  Margin="4" FontSize="10" Foreground="White" Click="Button_Click" />
+                                </DataTemplate>
+                            </controls:DataGridTemplateColumn.CellEditingTemplate>
+                        </controls:DataGridTemplateColumn>
+                    </controls:DataGrid.Columns>
+                </controls:DataGrid>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

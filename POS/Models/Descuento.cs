@@ -14,7 +14,7 @@ namespace POS.Models
         {
             get; set;
         }
-        public string Nombre { get; set; }
+        public string NombreDescuento { get; set; }
 
         public double Porcentaje { get; set; }
     }

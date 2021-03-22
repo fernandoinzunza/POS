@@ -6,6 +6,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -23,6 +24,8 @@ namespace POS.Views
     /// </summary>
     public sealed partial class Inventory : Page
     {
+        Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+
         public Inventory()
         {
             InitializeComponent();
@@ -32,6 +35,13 @@ namespace POS.Views
             coreTitleBar.LayoutMetricsChanged += CoreTitleBar_LayoutMetricsChanged;
             // Set XAML element as a draggable region.
             Window.Current.SetTitleBar(DragGrid);
+            nuevaEntrada.IsEnabled = (bool)localSettings.Values["NuevaEntrada"];
+            nuevaSalida.IsEnabled = (bool)localSettings.Values["NuevaSalida"];
+            entradaPorReposicion.IsEnabled = (bool)localSettings.Values["EntradaPorReposicion"];
+            verStocks.IsEnabled = (bool)localSettings.Values["StockDisponible"];
+            bitacoraEntradas.IsEnabled = (bool)localSettings.Values["BitacoraEntradas"];
+            bitacoraSalidas.IsEnabled = (bool)localSettings.Values["BitacoraDeSalidas"];
+            
         }
 
         private void CoreTitleBar_LayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args)
@@ -74,7 +84,37 @@ namespace POS.Views
                         contentFrame.Navigate(typeof(SalidaAlmacen));
                         break;
                     }
+                case "ListaSalidas":
+                    {
+                        contentFrame.Navigate(typeof(ListaSalidas));
+                        break;
+                    }
+                case "EntradaPorReposicion":
+                    {
+                        contentFrame.Navigate(typeof(EntradaPorReposicion));
+                        break;
+                    }
+                case "ListaReposiciones":
+                    {
+                        contentFrame.Navigate(typeof(ListaReposiciones));
+                        break;
+                    }
             }
+        }
+
+        private void rootNavigationView_Loaded(object sender, RoutedEventArgs e)
+        {
+            var navView = sender as Microsoft.UI.Xaml.Controls.NavigationView;
+            var rootGrid = VisualTreeHelper.GetChild(navView, 0) as Grid;
+
+            // SDK 18362 (1903)
+            // SDK 17763 (1809)
+
+                // Find the back button.
+                var paneToggleButtonGrid = VisualTreeHelper.GetChild(rootGrid, 0) as Grid;
+                var buttonHolderGrid = VisualTreeHelper.GetChild(paneToggleButtonGrid, 1) as Grid;
+                var navigationViewBackButton = VisualTreeHelper.GetChild(buttonHolderGrid, 0) as Button;
+                navigationViewBackButton.Background = new SolidColorBrush(Color.FromArgb(255, 50, 168, 82));
         }
     }
 }

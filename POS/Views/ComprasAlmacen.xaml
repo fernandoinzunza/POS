@@ -21,18 +21,51 @@
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Row="0" Grid.Column="0">
-                        <TextBlock FontFamily="Arial"  FontSize="17">Lista de articulos</TextBlock>
+                        <TextBlock FontFamily="Arial"  FontSize="17">Lista de entradas a almacen</TextBlock>
                         <TextBlock FontFamily="Arial" Foreground="DarkGray" FontSize="10">Puede buscar por cualquier columna de la tabla</TextBlock>
                     </StackPanel>
-                    <TextBox FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" PlaceholderText="Buscar" Grid.Row="0" Grid.Column="1">
+                    <TextBox x:Name="buscarCompra" KeyUp="TextBox_KeyUp" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" PlaceholderText="Buscar" Grid.Row="0" Grid.Column="1">
                     </TextBox>
+                    
                 </Grid>
-                <controls:DataGrid  HorizontalScrollBarVisibility="Hidden" FontFamily="Arial" GridLinesVisibility="All" Margin="40" AutoGenerateColumns="False" x:Name="dataGrid" ItemsSource="{Binding ComprasAlmacen}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <DatePicker SelectedDate="{Binding Desde,Mode=TwoWay}" x:Name="desde" Margin="40 0 40 0"  CornerRadius="0" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2"   Grid.Row="0" Grid.Column="0" Header="Desde:"></DatePicker>
+                    <DatePicker SelectedDate="{Binding Hasta,Mode=TwoWay}" x:Name="hasta" Margin="40 0 40 0" CornerRadius="0" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" Grid.Row="0" Grid.Column="1" Header="Hasta:"></DatePicker>
+                    <AppBarButton Background="#32a852" Foreground="White" Command="{Binding CrearExcel}" Grid.Row="0" Grid.Column="2" Icon="Document" Label="Exportar a excel"></AppBarButton>
+                </Grid>
+                <controls:DataGrid SelectionChanged="dataGrid_SelectionChanged" x:Name="dataGrid" ColumnWidth="*" BorderBrush="Gray" BorderThickness="2"  AlternatingRowBackground="LightGray"  HorizontalScrollBarVisibility="Hidden" FontFamily="Arial" GridLinesVisibility="All" Margin="40" AutoGenerateColumns="False" ItemsSource="{Binding ComprasAlmacen}">
                     <controls:DataGrid.RowDetailsTemplate>
                         <DataTemplate>
-                            <controls:DataGrid GridLinesVisibility="All" ItemsSource="{Binding Value}" AutoGenerateColumns="True">
-
-                            </controls:DataGrid>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <controls:DataGrid Grid.Row="0" ColumnWidth="*" Grid.Column="0"  GridLinesVisibility="All" AlternatingRowBackground="LightGray" ItemsSource="{Binding Value}" AutoGenerateColumns="False">
+                                    <controls:DataGrid.Columns>
+                                        <controls:DataGridTextColumn Header="Departamento" Binding="{Binding Departamento}"/>
+                                        <controls:DataGridTextColumn Header="Clave articulo" Binding="{Binding ClaveArticulo}"/>
+                                        <controls:DataGridTextColumn Header="Descripcion" Binding="{Binding Articulo}"/>
+                                        <controls:DataGridTextColumn Header="Proveedor" Binding="{Binding NombreProveedor}"/>
+                                        <controls:DataGridTextColumn Header="Cajas" Binding="{Binding CajasStock}"/>
+                                        <controls:DataGridTextColumn Header="Unidades por caja" Binding="{Binding UnidadesXCaja}"/>
+                                        <controls:DataGridTextColumn Header="Stock individual" Binding="{Binding StockIndividual}"/>
+                                        <controls:DataGridTextColumn Header="SubTotal" Binding="{Binding CostoTotal}"/>
+                                    </controls:DataGrid.Columns>
+                                </controls:DataGrid>
+                            </Grid>
+                            
                         </DataTemplate>
                     </controls:DataGrid.RowDetailsTemplate>
                     <controls:DataGrid.Columns>
@@ -44,6 +77,15 @@
                         </controls:DataGridTextColumn>
                         <controls:DataGridTextColumn Header="Empleado que capturo" IsReadOnly="True"  Binding="{Binding Key.NombreEmpleado}">
                         </controls:DataGridTextColumn>
+                        <controls:DataGridTemplateColumn Header="Abrir/Cerrar detalles">
+                            <controls:DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button HorizontalAlignment="Center" x:Name="btnDetalles" Click="Button_Click" Grid.Row="0" Grid.Column="1" ToolTipService.ToolTip="Abrir/Cerrar detalles" Margin="2" CornerRadius="0">
+                                        <SymbolIcon x:Name="icono" Symbol="View"/>
+                                    </Button>
+                                </DataTemplate>
+                            </controls:DataGridTemplateColumn.CellTemplate>
+                        </controls:DataGridTemplateColumn>
                     </controls:DataGrid.Columns>
                 </controls:DataGrid>
             </StackPanel>

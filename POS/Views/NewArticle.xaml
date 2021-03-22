@@ -14,11 +14,77 @@
     <Page.DataContext>
         <local:NewArticleViewModel></local:NewArticleViewModel>
     </Page.DataContext>
-
-    <ScrollViewer >
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="CheckBoxForegroundUnchecked"
+                        Color="Black"/>
+                    <SolidColorBrush x:Key="CheckBoxForegroundChecked"
+                        Color="Black"/>
+                    <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundChecked"
+                        Color="White"/>
+                    <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeChecked"  
+                        Color="#79d279"/>
+                    <SolidColorBrush x:Key="CheckBoxBackgroundPointerOver" Color="#79d279"></SolidColorBrush>
+                    <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked"
+                        Color="#79d279"/>
+                    <SolidColorBrush x:Key="TextControlBorderBrushFocused"
+                 Color="#79d279"/>
+                    <SolidColorBrush x:Key="ComboBoxBorderBrushFocused"
+                 Color="#79d279"/>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+    <ScrollViewer>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0"></AdaptiveTrigger>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="form.Margin" Value="20 0 20 0"></Setter>
+                        <Setter Target="element1.(Grid.Row)" Value="0"></Setter>
+                        <Setter Target="element2.(Grid.Row)" Value="1"></Setter>
+                        <Setter Target="element3.(Grid.Row)" Value="2"></Setter>
+                        <Setter Target="element4.(Grid.Row)" Value="3"></Setter>
+                        <Setter Target="element5.(Grid.Row)" Value="4"></Setter>
+                        <Setter Target="element6.(Grid.Row)" Value="5"></Setter>
+                        <Setter Target="element7.(Grid.Row)" Value="6"></Setter>
+                        <Setter Target="element8.(Grid.Row)" Value="7"></Setter>
+                        <Setter Target="element1.(Grid.Column)" Value="0"></Setter>
+                        <Setter Target="element2.(Grid.Column)" Value="0"></Setter>
+                        <Setter Target="element3.(Grid.Column)" Value="0"></Setter>
+                        <Setter Target="element4.(Grid.Column)" Value="0"></Setter>
+                        <Setter Target="element5.(Grid.Column)" Value="0"></Setter>
+                        <Setter Target="element6.(Grid.Column)" Value="0"></Setter>
+                        <Setter Target="element7.(Grid.Column)" Value="0"></Setter>
+                        <Setter Target="element8.(Grid.Column)" Value="0"></Setter>
+                        <Setter Target="element1.(Grid.ColumnSpan)" Value="2"></Setter>
+                        <Setter Target="element2.(Grid.ColumnSpan)" Value="2"></Setter>
+                        <Setter Target="element3.(Grid.ColumnSpan)" Value="2"></Setter>
+                        <Setter Target="element4.(Grid.ColumnSpan)" Value="2"></Setter>
+                        <Setter Target="element5.(Grid.ColumnSpan)" Value="2"></Setter>
+                        <Setter Target="element6.(Grid.ColumnSpan)" Value="2"></Setter>
+                        <Setter Target="element7.(Grid.ColumnSpan)" Value="2"></Setter>
+                        <Setter Target="element8.(Grid.ColumnSpan)" Value="2"></Setter>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="641"></AdaptiveTrigger>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="form.Margin" Value="20 0 20 0"></Setter>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
         <StackPanel >
             <controls:HeaderedContentControl FontFamily="Arial" FontSize="20" Margin="100 20 100 20" Header="Añadir articulo"></controls:HeaderedContentControl>
-            <Grid Margin="100 20 100 0">
+            <Grid x:Name="form" Margin="100 20 100 0">
                 <Grid  RowSpacing="20"  ColumnSpacing="20">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"></RowDefinition>
@@ -35,13 +101,15 @@
                         <ColumnDefinition Width="*"></ColumnDefinition>
                         <ColumnDefinition  Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <TextBox Header="Clave del producto:" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Text="{Binding TxtClave, Mode=TwoWay}" Grid.Row="0"  Grid.Column="0" PlaceholderText="Clave"></TextBox>
-                    <TextBox Header="Agrega una descripcion:" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Text="{Binding TxtDescripcion, Mode=TwoWay}" Grid.Row="0" MinWidth="200" Grid.Column="1" PlaceholderText="Descripcion"></TextBox>
-                    <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal" Grid.ColumnSpan="2" Grid.Row="2" Spacing="20" Grid.Column="0">
-                        <CheckBox BorderBrush="Gray" BorderThickness="2" CornerRadius="0" FontFamily="Arial" Command="{Binding CheckOld}" IsChecked="{Binding NewSection}" Content="Nuevo departamento?" FontSize="12"></CheckBox>
-                        <TextBox Header="Agrega un nuevo departamento:" HorizontalAlignment="Stretch" Width="500" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" IsEnabled="{Binding NewSection}" Text="{Binding TxtDepartamento, Mode=TwoWay}"   PlaceholderText="Nuevo departamento"></TextBox>
+                    <TextBox x:Name="element1" Header="Clave del producto:" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Text="{Binding TxtClave, Mode=TwoWay}" Grid.Row="0"  Grid.Column="0" PlaceholderText="Clave"></TextBox>
+                    <TextBox x:Name="element2"  Header="Agrega una descripcion:" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Text="{Binding TxtDescripcion, Mode=TwoWay}" Grid.Row="0" MinWidth="200" Grid.Column="1" PlaceholderText="Descripcion"></TextBox>
+                    <StackPanel  x:Name="element3" HorizontalAlignment="Stretch" Orientation="Horizontal" Grid.ColumnSpan="2" Grid.Row="2" Width="auto" Grid.Column="0">
+                        <CheckBox  BorderBrush="Gray" BorderThickness="2" CornerRadius="0" FontFamily="Arial" Command="{Binding CheckOld}" IsChecked="{Binding NewSection}" Content="Nuevo departamento?" FontSize="14">
+
+                        </CheckBox>
+                        <TextBox Header="Agrega un nuevo departamento:" HorizontalAlignment="Stretch"  FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" IsEnabled="{Binding NewSection}" Text="{Binding TxtDepartamento, Mode=TwoWay}"   PlaceholderText="Nuevo departamento"></TextBox>
                     </StackPanel>
-                    <ComboBox Header="Departamentos existentes:" Grid.ColumnSpan="2" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" IsEnabled="{Binding OldSection}" SelectedItem="{Binding ComboDepartamentos, Mode=TwoWay}"   ItemsSource="{Binding Departamentos}"  Grid.Row="3" HorizontalAlignment="Stretch" PlaceholderText="Departamento" Grid.Column="0">
+                    <ComboBox x:Name="element4" Header="Departamentos existentes:" Grid.ColumnSpan="2" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" IsEnabled="{Binding OldSection}" SelectedItem="{Binding ComboDepartamentos, Mode=TwoWay}"   ItemsSource="{Binding Departamentos}"  Grid.Row="3" HorizontalAlignment="Stretch" PlaceholderText="Departamento" Grid.Column="0">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -51,20 +119,22 @@
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
-                    
-                    <StackPanel Grid.Row="4" Grid.Column="0">
+                    <StackPanel x:Name="element5" Grid.Row="4" Grid.Column="0">
                         <TextBlock FontFamily="Arial" Text="Selecciona los precios que necesites"></TextBlock>
                         <CheckBox FontFamily="Arial"  x:Name="Option1CheckBox" Content="Precio al publico" IsChecked="true" IsEnabled="False" Margin="24,0,0,0" 
-             />
+             >
+
+                        </CheckBox>
                         <CheckBox FontFamily="Arial" Command="{Binding CheckClick}" x:Name="Option2CheckBox" Content="Precio secundario" Margin="24,0,0,0" 
-              />
+              >
+
+                        </CheckBox>
                         <CheckBox FontFamily="Arial" Command="{Binding Check3Click}" x:Name="Option4CheckBox" Content="Precio por mayoreo" Margin="24,0,0,0"
                />
-
                     </StackPanel>
-                    <StackPanel Spacing="10" Grid.Row="4" Grid.Column="1">
+                    <StackPanel x:Name="element6" Spacing="10" Grid.Row="4" Grid.Column="1">
                         <StackPanel Orientation="Horizontal">
-                            <ComboBox HorizontalAlignment="Stretch" BorderBrush="Gray" BorderThickness="2" FontFamily="Arial" CornerRadius="0" SelectedValuePath="Content" SelectedValue="{Binding ComboTipos, Mode=TwoWay}"  Header="Que tipo de unidad es?">
+                            <ComboBox SelectedIndex="0" HorizontalAlignment="Stretch" BorderBrush="Gray" BorderThickness="2" FontFamily="Arial" CornerRadius="0" SelectedValuePath="Content" SelectedValue="{Binding ComboTipos, Mode=TwoWay}"  Header="Que tipo de unidad es?">
                                 <ComboBoxItem Content="Unidad de peso"></ComboBoxItem>
                                 <ComboBoxItem Content="Unidad de distancia"></ComboBoxItem>
                                 <ComboBoxItem Content="Unidad por pieza"></ComboBoxItem>
@@ -79,25 +149,27 @@
                             </ComboBox.ItemTemplate>
                         </ComboBox>
                     </StackPanel>
-                    <StackPanel Margin="20 20 20 20" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">
-                        <winui:NumberBox FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Value="{Binding TxtPrecioPublico, Mode=TwoWay}" Minimum="0" Header="Precio al publico"  SmallChange="1" LargeChange="100" SpinButtonPlacementMode="Inline" Grid.Row="4" Grid.Column="0" PlaceholderText="Precio al publico"></winui:NumberBox>
-                        <winui:NumberBox FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Minimum="0" IsEnabled="{Binding CheckBox1}" SmallChange="1" LargeChange="100" SpinButtonPlacementMode="Inline" Grid.Row="2" Grid.Column="1" Header="Precio secundario" Value="{Binding TxtPrecioSecundario, Mode=TwoWay}"></winui:NumberBox>
-                        <winui:NumberBox FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Minimum="0" IsEnabled="{Binding CheckBox3}" SmallChange="1" LargeChange="100" SpinButtonPlacementMode="Inline" Grid.Row="2" Grid.Column="1" Header="Precio al mayoreo" Value="{Binding TxtPrecioMayoreo, Mode=TwoWay}"></winui:NumberBox>
-                        <winui:NumberBox FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Minimum="0" SmallChange="1" LargeChange="100" SpinButtonPlacementMode="Inline" Grid.Row="2" Grid.Column="1" Header="Considerar stock bajo en:" Value="{Binding StockBajo, Mode=TwoWay}"></winui:NumberBox>
-                    </StackPanel>
-                    <Button Background="#0067b8" Foreground="white" FontFamily="Arial" Command="{Binding AddArticle}"  Margin="40 0 40 0"  HorizontalAlignment="Stretch" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2">Agregar</Button>
-                </Grid>
-                <controls:Loading  x:Name="LoadPbar" IsLoading="{Binding IsBusy}" Margin="100 20 100 100" Opacity="0.8" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Background="LightGray">
-                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="12" >
-                        <TextBlock Opacity="0.9" Text="Guardando... Por favor, espera" Foreground="Black" VerticalAlignment="Center" />
-                        <Grid Height="134" Width="76" Opacity="0.9">
-                            <ProgressBar IsIndeterminate="True" Width="200" Foreground="Blue" />
+                    <StackPanel x:Name="element7" Margin="20 20 20 20" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">
+                        <winui:NumberBox ValidationMode="InvalidInputOverwritten" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Value="{Binding TxtPrecioPublico, Mode=TwoWay}" Minimum="0" Header="Precio al publico"  SmallChange="1" LargeChange="100" SpinButtonPlacementMode="Inline" Grid.Row="4" Grid.Column="0" PlaceholderText="Precio al publico"></winui:NumberBox>
+                        <winui:NumberBox ValidationMode="InvalidInputOverwritten" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Minimum="0" IsEnabled="{Binding CheckBox1}" SmallChange="1" LargeChange="100" SpinButtonPlacementMode="Inline" Grid.Row="2" Grid.Column="1" Header="Precio secundario" Value="{Binding TxtPrecioSecundario, Mode=TwoWay}"></winui:NumberBox>
+                        <winui:NumberBox ValidationMode="InvalidInputOverwritten" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Minimum="0" IsEnabled="{Binding CheckBox3}" SmallChange="1" LargeChange="100" SpinButtonPlacementMode="Inline" Grid.Row="2" Grid.Column="1" Header="Precio al mayoreo" Value="{Binding TxtPrecioMayoreo, Mode=TwoWay}"></winui:NumberBox>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <controls:HeaderedContentControl Header="Considerar stock bajo en:"></controls:HeaderedContentControl>
+                            <winui:NumberBox ValidationMode="InvalidInputOverwritten"  Grid.Row="1" Grid.Column="0" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Minimum="0" SmallChange="1" LargeChange="100" SpinButtonPlacementMode="Inline" Header="{Binding UPlace}" Value="{Binding StockBajo, Mode=TwoWay}"></winui:NumberBox>
                         </Grid>
                     </StackPanel>
-                </controls:Loading>
+                    <Button x:Name="element8" Background="#32a852" Foreground="white" FontFamily="Arial" Command="{Binding AddArticle}"  Margin="40 0 40 0"  HorizontalAlignment="Stretch" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2">Agregar</Button>
+                </Grid>
             </Grid>
-            
         </StackPanel>
     </ScrollViewer>
-    
+
 </Page>

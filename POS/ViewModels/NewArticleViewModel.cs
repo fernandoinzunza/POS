@@ -53,7 +53,8 @@ namespace POS.ViewModels
         public RelayCommand Check4Click { get; set; }
         public RelayCommand AddArticle { get; set; }
         public RelayCommand CheckOld { get; set; }
-        public  NewArticleViewModel()
+        public List<Articulo> Articulos { get; set; }
+        public NewArticleViewModel()
         {
             _httpClient = new HttpClient();
             CheckBox1 = false;
@@ -69,24 +70,29 @@ namespace POS.ViewModels
             Check2Click = new RelayCommand(o => { Check2Cambio(); });
             Check3Click = new RelayCommand(o => { Check3Cambio(); });
             Check4Click = new RelayCommand(o => { Check4Cambio(); });
-            AddArticle = new RelayCommand(async(o) => { await AgregarArticulo(); });
+            AddArticle = new RelayCommand(async (o) => { await AgregarArticulo(); });
             PesoChecked = new RelayCommand(o => { RadioPesoF(); });
             DistanciaChecked = new RelayCommand(o => { RadioDistanciaF(); });
             Departamentos = new List<Departamento>();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-           HttpResponseMessage response = _httpClient.GetAsync("http://localhost:9095/api/Departamentos/GetDepartamentos/").Result;  // Blocking call! Program will wait here until a response is received or a timeout occurs.
-            if(response.IsSuccessStatusCode)
+            HttpResponseMessage response = _httpClient.GetAsync("http://localhost:9095/api/Departamentos/GetDepartamentos/").Result;  // Blocking call! Program will wait here until a response is received or a timeout occurs.
+            if (response.IsSuccessStatusCode)
             {
                 var lista = response.Content.ReadAsStringAsync().Result;
                 Departamentos = JsonSerializer.Deserialize<List<Departamento>>(lista.ToString(), new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
                 //Make sure to add a reference to System.Net.Http.Formatting.dll
 
             }
+            response = _httpClient.GetAsync("http://localhost:9095/api/Articulos/GetArticulos/").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                Articulos = JsonSerializer.Deserialize<List<Articulo>>(response.Content.ReadAsStringAsync().Result, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            }
             _httpClient = new HttpClient();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             Proveedores = new List<Proveedor>();
             HttpResponseMessage r = _httpClient.GetAsync("http://localhost:9095/api/Providers/GetProviders").Result;
-            if(r.IsSuccessStatusCode)
+            if (r.IsSuccessStatusCode)
             {
                 var lista = r.Content.ReadAsStringAsync().Result;
                 Proveedores = JsonSerializer.Deserialize<List<Proveedor>>(lista.ToString(), new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
@@ -112,9 +118,10 @@ namespace POS.ViewModels
         public object ComboDepartamentos
         {
             get { return comboDep; }
-            set {
-                SetProperty(ref comboDep, value); 
-            
+            set
+            {
+                SetProperty(ref comboDep, value);
+
             }
         }
         public bool OldSection
@@ -213,13 +220,30 @@ namespace POS.ViewModels
         public object ComboUnidad
         {
             get { return comboUnidad; }
-            set { SetProperty(ref comboUnidad, value); }
+            set
+            {
+                if (ComboTipos != null)
+                {
+                    SetProperty(ref comboUnidad, value);
+                    if (ComboUnidad != null)
+                    {
+                        UPlace = (ComboUnidad as UnidadMedida).Nombre;
+                    }
+                }
+                else
+                {
+                    var md = new MessageDialog("Selecciona el tipo de medida y despues la unidad!", "Mensaje del Sistema");
+                    md.ShowAsync();
+                }
+
+            }
         }
         public double StockBajo
         {
             get { return stockBajo; }
             set { SetProperty(ref stockBajo, value); }
         }
+
         #endregion
 
         public void RadioDistanciaF()
@@ -229,6 +253,12 @@ namespace POS.ViewModels
         public void RadioPesoF()
         {
             TxtTipoUnidad = "Peso";
+        }
+        private string uPlace;
+        public string UPlace
+        {
+            get { return uPlace; }
+            set { SetProperty(ref uPlace, value); }
         }
         public bool RadioPeso
         {
@@ -243,8 +273,10 @@ namespace POS.ViewModels
         public string ComboTipos
         {
             get { return comboTipos; }
-            set { SetProperty(ref comboTipos, value);
-            if(!string.IsNullOrEmpty(ComboTipos))
+            set
+            {
+                SetProperty(ref comboTipos, value);
+                if (!string.IsNullOrEmpty(ComboTipos))
                 {
                     UnidadesPorTipo = Unidades.Where(b => b.TipoUnidad == ComboTipos).ToList();
                 }
@@ -253,7 +285,7 @@ namespace POS.ViewModels
         public List<UnidadMedida> UnidadesPorTipo
         {
             get { return unidadesPorTipo; }
-            set { SetProperty(ref unidadesPorTipo,value); }
+            set { SetProperty(ref unidadesPorTipo, value); }
         }
         public List<Departamento> Departamentos
         {
@@ -298,88 +330,130 @@ namespace POS.ViewModels
         }
         public async Task AgregarArticulo()
         {
-            int id = 0;
-            if (NewSection)
+            var alerta = new MessageDialog("", "Mensaje del Sistema");
+            if (TxtClave == "")
             {
-                var departamento = new Departamento();
-                departamento.Nombre = TxtDepartamento;
-                HttpClient cliente = new HttpClient();
-                var objeto = JsonSerializer.Serialize(departamento);
-                var contenido = new StringContent(objeto, Encoding.UTF8);
-                contenido.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                var resultado = await cliente.PostAsync("http://localhost:9095/api/Departamentos/Agregar", contenido);
-                var get = JsonSerializer.Deserialize<Departamento>( await resultado.Content.ReadAsStringAsync(),new JsonSerializerOptions { PropertyNameCaseInsensitive = true});
-                id = get.Id;
-            
+                alerta.Content = "El articulo debe llevar una clave";
+                await alerta.ShowAsync();
+
             }
-            var articulo = new Articulo();
-            articulo.Clave = TxtClave;
-            if (NewSection)
-                articulo.Departamento = TxtDepartamento;
+            else if (TxtDescripcion == "")
+            {
+                alerta.Content = "El articulo debe llevar una descripcion!";
+                await alerta.ShowAsync();
+            }
+            else if (TxtDepartamento == null && ComboDepartamentos == null)
+            {
+                alerta.Content = "Selecciona o agrega un departamento!";
+                await alerta.ShowAsync();
+            }
+            else if (ComboTipos == null)
+            {
+                alerta.Content = "Selecciona el tipo de medida!";
+                await alerta.ShowAsync();
+            }
+            else if (ComboUnidad == null)
+            {
+                alerta.Content = "Selecciona la unidad de medida a vender!";
+                await alerta.ShowAsync();
+            }
             else
             {
-                articulo.Departamento = (ComboDepartamentos as Departamento).Nombre;
-                id = (ComboDepartamentos as Departamento).Id;
-            }
-            articulo.IdProveedor = null;
-            articulo.NombreProveedor = null;
-            articulo.IdDepartamento = id;
-            articulo.Descripcion = TxtDescripcion;
-            articulo.PrecioAlCosto = Convert.ToDouble(TxtPrecioAlCosto);
-            articulo.PrecioMayoreo = Convert.ToDouble(TxtPrecioMayoreo);
-            articulo.PrecioPublico = Convert.ToDouble(TxtPrecioPublico);
-            articulo.PrecioSecundario = Convert.ToDouble(TxtPrecioSecundario);
-            articulo.Stock = (float)TxtStock;
-            articulo.TipoUnidad = ComboTipos;
-            articulo.Unidad = (ComboUnidad as UnidadMedida).Nombre;
-            articulo.StockBajo = StockBajo;
-            articulo.Caja = "No";
-            articulo.CajasStock = 0;
-            articulo.UnidadesXCaja = 0;
-            HttpClient httpClient = new HttpClient();
-            var obj = JsonSerializer.Serialize(articulo);
-            var content = new StringContent(obj, Encoding.UTF8);
-            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            
-            var result = await httpClient.PostAsync("http://localhost:9095/api/Articulos/Agregar", content);
-            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            HttpResponseMessage response = await _httpClient.GetAsync("http://localhost:9095/api/Departamentos/GetDepartamentos/");  // Blocking call! Program will wait here until a response is received or a timeout occurs.
-            if (response.IsSuccessStatusCode)
-            {
-                var ob = response.Content.ReadAsStringAsync().Result;
-                Departamentos = JsonSerializer.Deserialize<List<Departamento>>(ob);
-                //Make sure to add a reference to System.Net.Http.Formatting.dll
-
-            }
-           
-                TxtClave = "";
-            TxtDepartamento = "";
-            TxtDescripcion = "";
-            TxtPrecioAlCosto = 0;
-            TxtPrecioMayoreo = 0;
-            TxtPrecioSecundario = 0;
-            TxtPrecioPublico = 0;
-            TxtStock = 0;
-
-            TxtTipoUnidad = "";
-            
-            if(result.IsSuccessStatusCode)
-            {
-                var dialog = new MessageDialog("Articulo agregado exitosamente!", "Mensaje");
-
-                // If you want to add custom buttons
-                dialog.Commands.Add(new UICommand("Aceptar", delegate (IUICommand command)
+                int id = 0;
+                var existe = Articulos.Where(b => b.Clave == TxtClave).Count();
+                if (existe == 1)
                 {
-                    // Your command action here
-                }));
+                    alerta.Content = "El articulo con clave: " + TxtClave + " ya existe!";
+                    await alerta.ShowAsync();
+                }
+                else
+                {
 
-                // Show dialog and save result
-               await dialog.ShowAsync();
+
+                    if (NewSection)
+                    {
+                        var departamento = new Departamento();
+                        departamento.Nombre = TxtDepartamento;
+                        HttpClient cliente = new HttpClient();
+                        var objeto = JsonSerializer.Serialize(departamento);
+                        var contenido = new StringContent(objeto, Encoding.UTF8);
+                        contenido.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                        var resultado = await cliente.PostAsync("http://localhost:9095/api/Departamentos/Agregar", contenido);
+                        var get = JsonSerializer.Deserialize<Departamento>(await resultado.Content.ReadAsStringAsync(), new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                        id = get.Id;
+
+                    }
+                    var articulo = new Articulo();
+                    articulo.Clave = TxtClave;
+                    if (NewSection)
+                        articulo.Departamento = TxtDepartamento;
+                    else
+                    {
+                        articulo.Departamento = (ComboDepartamentos as Departamento).Nombre;
+                        id = (ComboDepartamentos as Departamento).Id;
+                    }
+                    articulo.IdProveedor = null;
+                    articulo.NombreProveedor = null;
+                    articulo.IdDepartamento = id;
+                    articulo.Descripcion = TxtDescripcion;
+                    articulo.PrecioAlCosto = Convert.ToDouble(TxtPrecioAlCosto);
+                    articulo.PrecioMayoreo = Convert.ToDouble(TxtPrecioMayoreo);
+                    articulo.PrecioPublico = Convert.ToDouble(TxtPrecioPublico);
+                    articulo.PrecioSecundario = Convert.ToDouble(TxtPrecioSecundario);
+                    articulo.Stock = (float)TxtStock;
+                    articulo.TipoUnidad = ComboTipos;
+                    articulo.Unidad = (ComboUnidad as UnidadMedida).Nombre;
+                    articulo.StockBajo = StockBajo;
+                    articulo.Caja = "No";
+                    articulo.CajasStock = 0;
+                    articulo.UnidadesXCaja = 0;
+                    articulo.StockIndividual = 0;
+                    articulo.PrecioXCaja = 0;
+                    articulo.NombreDescuento = "Ninguno";
+                    articulo.IdDescuento = 2;
+                    HttpClient httpClient = new HttpClient();
+                    var obj = JsonSerializer.Serialize(articulo);
+                    var content = new StringContent(obj, Encoding.UTF8);
+                    content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                    var result = await httpClient.PostAsync("http://localhost:9095/api/Articulos/Agregar", content);
+                    _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    HttpResponseMessage response = await _httpClient.GetAsync("http://localhost:9095/api/Departamentos/GetDepartamentos/");  // Blocking call! Program will wait here until a response is received or a timeout occurs.
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var ob = response.Content.ReadAsStringAsync().Result;
+                        Departamentos = JsonSerializer.Deserialize<List<Departamento>>(ob.ToString(), new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                        //Make sure to add a reference to System.Net.Http.Formatting.dll
+
+                    }
+
+                    TxtClave = "";
+                    TxtDescripcion = "";
+                    TxtPrecioAlCosto = 0;
+                    TxtPrecioMayoreo = 0;
+                    TxtPrecioSecundario = 0;
+                    TxtPrecioPublico = 0;
+                    TxtStock = 0;
+
+                    TxtTipoUnidad = "";
+
+                    if (result.IsSuccessStatusCode)
+                    {
+                        var dialog = new MessageDialog("Articulo agregado exitosamente!", "Mensaje");
+
+                        // If you want to add custom buttons
+                        dialog.Commands.Add(new UICommand("Aceptar", delegate (IUICommand command)
+                        {
+                        // Your command action here
+                    }));
+
+                        // Show dialog and save result
+                        await dialog.ShowAsync();
+                    }
+                    IsBusy = false;
+                }
             }
-            IsBusy = false;
-
         }
-
 
     }
 }

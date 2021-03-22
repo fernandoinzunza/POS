@@ -1,0 +1,45 @@
+﻿<Page
+    x:Class="POS.Views.MasVendidos"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:POS.ViewModels"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    mc:Ignorable="d"
+    
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.DataContext>
+        <local:SellViewModel></local:SellViewModel>
+    </Page.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="0" Grid.Column="0" Margin="40 40 40 0" FontFamily="Arial" FontSize="20"  Text="Articulos mas vendidos"></TextBlock>
+        <TextBlock FontSize="12" Foreground="Gray" Grid.Row="1" Grid.Column="0" FontFamily="Arial" Margin="40 0 40 0" Text="Selecciona el intervalo de fechas a buscar"/>
+        <TextBox  BorderThickness="2" FontFamily="Arial" Margin="40 30 40 0" Header="Buscar:" Grid.Column="3" Grid.Row="0" PlaceholderText="Buscar por folio"></TextBox>
+        <DatePicker FontFamily="Arial" CornerRadius="0" Margin="40 0 40 0" Date="{Binding Desde}" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Stretch" Header="Desde:" BorderBrush="Gray" BorderThickness="2"></DatePicker>
+        <DatePicker FontFamily="Arial" CornerRadius="0" Margin="40 0 40 0" Date="{Binding Hasta}" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" Header="Desde:" BorderBrush="Gray" BorderThickness="2"></DatePicker>
+        <AppBarButton Foreground="White" Grid.Row="2" Grid.Column="3" Margin="40 0 40 0" Background="#32a852" Label="Exportar a excel" Icon="Document"></AppBarButton>
+        <CommandBar  Background="#32a852" Foreground="White" Grid.Row="3" Grid.Column="0" Margin="40 0 40 0">
+            <AppBarButton Width="Auto" Command="{Binding MasVendidosAsc}"  Foreground="White" MinWidth="50"  Icon="Upload" Label="Ascendente" ToolTipService.ToolTip="Ascendente"/>
+            <AppBarButton Width="Auto" Command="{Binding MasVendidosDesc}" Foreground="White" MinWidth="50"  Icon="Download" Label="Descendente" ToolTipService.ToolTip="Descendente"/>
+            <CommandBar.Content>
+                <TextBlock Text="Ordenar por:" Margin="12,14" FontSize="12"></TextBlock>
+            </CommandBar.Content>
+        </CommandBar>
+        <controls:DataGrid IsReadOnly="true" BorderBrush="Gray" BorderThickness="2" FontFamily="Arial" GridLinesVisibility="All" Margin="40 40 40 0" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" ItemsSource="{Binding MasVendidos}" AutoGenerateColumns="True">
+            
+        </controls:DataGrid>
+    </Grid>
+</Page>

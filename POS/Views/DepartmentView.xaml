@@ -15,7 +15,7 @@
 
     <StackPanel Margin="40">
         <controls:HeaderedContentControl FontFamily="Arial" Orientation="Vertical" Header="Departamentos"></controls:HeaderedContentControl>
-        <controls:DataGrid  FontFamily="Arial" Margin="20"  AutoGenerateColumns="False"  SelectedItem="{Binding Path=SelectedRow, Mode=TwoWay}"   IsReadOnly="True" ColumnWidth="*" x:Name="dataGridDep" ItemsSource="{Binding ArticulosDep}">
+        <controls:DataGrid BorderBrush="Gray" BorderThickness="2" GridLinesVisibility="All" AlternatingRowBackground="LightGray" FontFamily="Arial" Margin="20"  AutoGenerateColumns="False"  SelectedItem="{Binding Path=SelectedRow, Mode=TwoWay}"   IsReadOnly="True" ColumnWidth="*" x:Name="dataGridDep" ItemsSource="{Binding ArticulosDep}">
             <controls:DataGrid.Columns>
                 <controls:DataGridTextColumn FontSize="20" Header="Nombre" Binding="{Binding Path=Key}">
                     

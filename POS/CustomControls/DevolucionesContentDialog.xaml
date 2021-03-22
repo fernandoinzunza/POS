@@ -1,0 +1,33 @@
+﻿<ContentDialog
+    x:Class="POS.CustomControls.DevolucionesContentDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:POS.CustomControls"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Cancelaciones realizadas"
+    PrimaryButtonText="Aceptar"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
+    x:Name="contentDialog">
+    <ScrollViewer>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <controls:DataGrid RowHeight="55" BorderBrush="Gray" BorderThickness="2" FontFamily="Arial" CornerRadius="0" AlternatingRowBackground="LightBlue"  GridLinesVisibility="All" ColumnWidth="SizeToHeader" AutoGenerateColumns="False" ItemsSource="{Binding ElementName=contentDialog,Path=ListaDevoluciones}">
+                <controls:DataGrid.Columns>
+                    <controls:DataGridTextColumn IsReadOnly="True" Width="SizeToCells" Header="Tipo" Binding="{Binding TipoCancelacion}"/>
+                    <controls:DataGridTextColumn IsReadOnly="True" Header="Clave articulo" Binding="{Binding ClaveArticulo}"/>
+                    <controls:DataGridTextColumn IsReadOnly="True" Header="Concepto" Binding="{Binding DescripcionArticulo}"/>
+                    <controls:DataGridTextColumn IsReadOnly="True" Header="Cantidad" Binding="{Binding Cantidad}"/>
+                    <controls:DataGridTextColumn IsReadOnly="True" Header="Subtotal" Binding="{Binding Perdida}"/>
+                    <controls:DataGridTextColumn IsReadOnly="True" Header="Fecha Cancelacion" Binding="{Binding FechaDevolucion}"></controls:DataGridTextColumn>
+                </controls:DataGrid.Columns>
+            </controls:DataGrid>
+        </Grid>
+    </ScrollViewer>
+   
+</ContentDialog>

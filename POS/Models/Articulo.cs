@@ -32,11 +32,20 @@ namespace POS.Models
         public string Unidad { get; set; }
         public int? IdProveedor { get; set; }
         public string NombreProveedor { get; set; }
-        public double StockBajo { get; set; }
+        public double StockBajo { get; set; } 
         public int IdDepartamento { get; set; }
         public string Caja { get; set; }
         public double UnidadesXCaja {get;set;}
         public int CajasStock { get; set; }
         public double PrecioXCaja { get; set; }
+        public double StockIndividual { get; set; }
+        
+        public double PrecioPublicoSinIva
+        {
+            get;set;
+        }
+        public double PrecioAlCostoSinIva { get; set; }
+        public string NombreDescuento { get; set; }
+        public int IdDescuento { get; set; }
     }
 }

@@ -1,0 +1,825 @@
+﻿using ClosedXML.Excel;
+using POS.Models;
+using POS.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
+using Windows.Storage;
+using Windows.UI.Popups;
+
+public class AllSellsViewModel : BaseViewModel
+{
+    private List<Articulo> articulos;
+    private ObservableCollection<Carrito> compra;
+    private HttpClient httpClient;
+    private HttpResponseMessage httpResponseMessage;
+    public const string urlArticulos = "http://localhost:9095/api/Articulos/";
+    public const string urlCajas = "http://localhost:9095/api/CajaDispArticulos/";
+    public const string urlVentas = "http://localhost:9095/api/Carritoes/";
+    public const string urlSalidas = "http://localhost:9095/api/SalidasAlmacen/";
+    public const string urlDepartamentos = "http://localhost:9095/api/Departamentos/";
+    public const string urlDevoluciones = "http://localhost:9095/api/Devolucions/";
+    private double totalCompra;
+    private bool tarjeta;
+    private bool efectivo;
+    private DateTimeOffset desde;
+    private DateTimeOffset hasta;
+    private ObservableCollection<Devolucion> devoluciones;
+    private ObservableCollection<Carrito> ventas;
+    private ObservableCollection<KeyValuePair<Carrito, ObservableCollection<Carrito>>> ventasSeparadas;
+    private double totalVentaSinIva;
+    private double totalVenta;
+    public double TotalVentaSinIva
+    {
+        get { return totalVentaSinIva; }
+        set { SetProperty(ref totalVentaSinIva, value); }
+    }
+    public double TotalVenta
+    {
+        get { return totalVenta; }
+        set { SetProperty(ref totalVenta, value); }
+    }
+    public DateTimeOffset Desde
+    {
+        get { return desde; }
+        set
+        {
+            if (value > Hasta)
+            {
+
+                DateTimeOffset outVar;
+                DateTimeOffset.TryParse("01/01/2021", out outVar);
+                Desde = outVar;
+                var md = new MessageDialog("La fecha final debe ser mayor a la fecha inicial", "Mensaje del Sistema");
+                ListaDevoluciones = new ObservableCollection<Devolucion>();
+                md.ShowAsync();
+            }
+            else
+            {
+                SetProperty(ref desde, value);
+                List<Devolucion> aux = GetDevoluciones().Result;
+                if (Hasta != null && aux != null)
+                    ListaDevoluciones = new ObservableCollection<Devolucion>(aux.Where(b => DateTimeOffset.Parse(b.FechaDevolucion) >= Desde && DateTimeOffset.Parse(b.FechaDevolucion) <= Hasta).ToList());
+
+            }
+
+        }
+    }
+    private double total;
+    private double totalSinIva;
+    public double Total
+    {
+        get { return total; }
+        set { SetProperty(ref total, value); }
+    }
+    public double TotalSinIva { get { return totalSinIva; } set { SetProperty(ref totalSinIva, value); } }
+    public DateTimeOffset Hasta
+    {
+        get { return hasta; }
+        set
+        {
+            if (value < Desde)
+            {
+                var md = new MessageDialog("La fecha final debe ser mayor a la fecha inicial", " Mensaje del Sistema");
+                md.ShowAsync();
+                DateTimeOffset outVar;
+                DateTimeOffset.TryParse("01/01/2021", out outVar);
+                ListaDevoluciones = new ObservableCollection<Devolucion>();
+                Hasta = DateTime.Now;
+            }
+            else
+            {
+                SetProperty(ref hasta, value);
+                List<Devolucion> aux = GetDevoluciones().Result;
+                if (Hasta != null && aux != null)
+                    ListaDevoluciones = new ObservableCollection<Devolucion>(aux.Where(b => DateTimeOffset.Parse(b.FechaDevolucion) >= Desde && DateTimeOffset.Parse(b.FechaDevolucion) <= Hasta).ToList());
+
+            }
+        }
+
+
+    }
+
+
+
+    public ObservableCollection<Devolucion> ListaDevoluciones
+    {
+        get { return devoluciones; }
+        set { SetProperty(ref devoluciones, value); }
+    }
+    public List<Articulo> Articulos
+    {
+        get { return articulos; }
+        set { SetProperty(ref articulos, value); }
+    }
+    public ObservableCollection<Carrito> Ventas
+    {
+        get { return ventas; }
+        set { SetProperty(ref ventas, value); }
+    }
+    public ObservableCollection<KeyValuePair<Carrito, ObservableCollection<Carrito>>> VentasSeparadas
+    {
+        get { return ventasSeparadas; }
+        set { SetProperty(ref ventasSeparadas, value); }
+    }
+    public List<CajaDispArticulo> Lista { get; set; }
+    public List<Devolucion> Devoluciones { get; set; }
+    public List<Departamento> Departamentos { get; set; }
+    public double TotalCompra
+    {
+        get { return totalCompra; }
+        set { SetProperty(ref totalCompra, value); }
+    }
+    public ObservableCollection<Carrito> Compra
+    {
+        get { return compra; }
+        set { SetProperty(ref compra, value); }
+    }
+    public bool Tarjeta
+    {
+        get { return tarjeta; }
+        set { SetProperty(ref tarjeta, value); }
+    }
+    public bool Efectivo
+    {
+        get { return efectivo; }
+        set { SetProperty(ref efectivo, value); }
+    }
+
+    public List<Carrito> CompraPorUtilidad { get; set; }
+    public RelayCommand FinalizarVenta { get; set; }
+    public string DateValue { get; set; }
+    public List<SalidaAlmacen> SalidasPorVenta { get; set; }
+    public List<SalidaAlmacen> SalidasPorCancelacion { get; set; }
+    public RelayCommand DevolucionesAExcel { get; set; }
+    public AllSellsViewModel()
+    {
+        httpClient = new HttpClient();
+        Efectivo = true;
+        Articulos = new List<Articulo>();
+        Compra = new ObservableCollection<Carrito>();
+        SalidasPorVenta = new List<SalidaAlmacen>();
+        SalidasPorCancelacion = new List<SalidaAlmacen>();
+        httpResponseMessage = httpClient.GetAsync(urlArticulos + "GetArticulos").Result;
+        DateValue = DateTime.Now.ToString();
+        Hasta = DateTimeOffset.Now;
+        Total = 0;
+        TotalSinIva = 0;
+        TotalVenta = 0;
+        TotalVentaSinIva = 0;
+        DateTimeOffset fecha;
+        DateTimeOffset.TryParse("01/01/2021", out fecha);
+        Desde = fecha;
+        var respuesta = httpClient.GetAsync(urlArticulos + "GetArticulos").Result;
+        if (respuesta.IsSuccessStatusCode)
+        {
+            var lista = respuesta.Content.ReadAsStringAsync().Result;
+            Articulos = JsonSerializer.Deserialize<List<Articulo>>(lista.ToString(), new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        }
+        httpResponseMessage = httpClient.GetAsync(urlDepartamentos + "GetDepartamentos/").Result;
+        if (httpResponseMessage.IsSuccessStatusCode)
+        {
+            var json = httpResponseMessage.Content.ReadAsStringAsync().Result;
+            Departamentos = JsonSerializer.Deserialize<List<Departamento>>(json.ToString(), new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        }
+        httpResponseMessage = httpClient.GetAsync(urlVentas + "GetCarritos/").Result;
+        if (httpResponseMessage.IsSuccessStatusCode)
+        {
+            var lista = httpResponseMessage.Content.ReadAsStringAsync().Result;
+            Ventas = JsonSerializer.Deserialize<ObservableCollection<Carrito>>(lista.ToString(), new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        }
+        var distinct = Ventas.GroupBy(b => b.Folio).Select(g => g.FirstOrDefault()).ToList();
+        VentasSeparadas = new ObservableCollection<KeyValuePair<Carrito, ObservableCollection<Carrito>>>();
+        foreach (var venta in Ventas)
+        {
+            TotalVenta += venta.SubTotal;
+            TotalVentaSinIva += venta.SubTotalSinIva;
+        }
+        foreach (var d in distinct)
+        {
+            var nuevoCarrito = new Carrito();
+
+            var collection = new ObservableCollection<Carrito>();
+            double total = 0;
+            double totalSinIva = 0;
+            foreach (var v in Ventas)
+            {
+
+                if (v.Folio == d.Folio && v.Cantidad != 0)
+                {
+                    total += v.SubTotal;
+                    totalSinIva += v.SubTotalSinIva;
+                    nuevoCarrito.SubTotal = total;
+                    nuevoCarrito.SubTotalSinIva = totalVentaSinIva;
+                    collection.Add(v);
+                }
+
+
+            }
+
+
+            nuevoCarrito.Cancelado = d.Cancelado;
+            nuevoCarrito.Cantidad = d.Cantidad;
+            nuevoCarrito.ClaveArticulo = d.ClaveArticulo;
+            nuevoCarrito.Folio = d.Folio;
+            nuevoCarrito.RazonCancelado = d.RazonCancelado;
+            nuevoCarrito.Cancelado = d.Cancelado;
+            nuevoCarrito.FechaVenta = d.FechaVenta;
+            nuevoCarrito.Id = d.Id;
+            nuevoCarrito.IdDescuento = d.IdDescuento;
+            nuevoCarrito.PorcentajeDescuento = d.PorcentajeDescuento;
+            nuevoCarrito.NombreDescuento = d.NombreDescuento;
+            VentasSeparadas.Add(new KeyValuePair<Carrito, ObservableCollection<Carrito>>(nuevoCarrito, collection));
+        }
+
+        FinalizarVenta = new RelayCommand(async (o) => { await NuevaVentaAsync(); });
+        CompraPorUtilidad = new List<Carrito>();
+        ListaDevoluciones = new ObservableCollection<Devolucion>(GetDevoluciones().Result);
+        DevolucionesAExcel = new RelayCommand(o => { ExportarAExcel(); });
+
+    }
+    public async Task<int> GetFolio()
+    {
+        httpResponseMessage = await httpClient.GetAsync(urlVentas + "GetVentas");
+        var lista = JsonSerializer.Deserialize<List<Venta>>(await httpResponseMessage.Content.ReadAsStringAsync(), new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        return lista.Count;
+    }
+    private List<Microsoft.UI.Xaml.Controls.TabViewItem> tabViewItems;
+    public List<Microsoft.UI.Xaml.Controls.TabViewItem> TabViewItems
+    {
+        get { return tabViewItems; }
+        set { SetProperty(ref tabViewItems, value); }
+    }
+    public async Task<List<Devolucion>> GetDevoluciones()
+    {
+        httpResponseMessage = httpClient.GetAsync(urlDevoluciones + "GetDevoluciones/").Result;
+        if (httpResponseMessage.IsSuccessStatusCode)
+        {
+            var lista = JsonSerializer.Deserialize<List<Devolucion>>(httpResponseMessage.Content.ReadAsStringAsync().Result, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            var listaAux = new List<Devolucion>();
+            foreach (var devolucion in lista)
+            {
+                var folio = devolucion.Folio;
+                var carrito = devolucion.IdCarrito;
+                var existe = listaAux.Where(b => b.Folio == folio && b.IdCarrito == carrito).Count();
+                if (existe == 0)
+                {
+                    listaAux.Add(devolucion);
+                }
+                else
+                {
+                    var existente = listaAux.Where(b => b.Folio == folio && b.IdCarrito == carrito).First();
+                    existente.Cantidad += devolucion.Cantidad;
+                    existente.Perdida += devolucion.Perdida;
+                    existente.PerdidaSivIva = existente.Perdida / 1.16;
+                }
+            }
+
+
+            return listaAux;
+        }
+        else
+        {
+            return new List<Devolucion>();
+        }
+    }
+    public async Task ReponerMercancia(Carrito carrito, double cantidad, string razon, string tipoCancelacion)
+    {
+        CajasModificadasArticulos = new List<List<CajaDispArticulo>>();
+        SalidasPorCancelacion = new List<SalidaAlmacen>();
+        httpResponseMessage = await httpClient.GetAsync(urlCajas + "GetCajasDisp");
+        var listaCajasDisp = JsonSerializer.Deserialize<List<CajaDispArticulo>>(await httpResponseMessage.Content.ReadAsStringAsync(), new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        var listaCajasPorArticulo = listaCajasDisp.Where(b => b.ClaveArticulo == carrito.ClaveArticulo).ToList();
+        double stockTotal = 0;
+        double utilidad = 0;
+        foreach (var lpa in listaCajasPorArticulo)
+        {
+            stockTotal += lpa.StockTotal;
+        }
+        if (stockTotal >= cantidad)
+        {
+            foreach (var caja in listaCajasDisp)
+            {
+                if (stockTotal >= cantidad)
+                {
+                    var salidaPorReposicion = new SalidaAlmacen();
+                    var devolucion = new Devolucion();
+                    if (cantidad <= caja.StockTotal)
+                    {
+                        caja.StockTotal -= cantidad;
+
+                        CompraPorUtilidad.Add(carrito);
+                        if (cantidad <= caja.StockIndividual)
+                        {
+                            devolucion.IdCaja = caja.Id;
+                            devolucion.IdCarrito = carrito.Id;
+                            devolucion.Perdida = carrito.PrecioPublico * cantidad;
+                            devolucion.PerdidaSivIva = devolucion.Perdida / 1.16;
+                            devolucion.Razon = razon;
+                            devolucion.TipoCancelacion = tipoCancelacion;
+                            devolucion.Folio = carrito.Folio;
+                            devolucion.FechaDevolucion = DateTime.Now.ToString();
+                            devolucion.ClaveArticulo = carrito.ClaveArticulo;
+                            devolucion.DescripcionArticulo = carrito.DescripcionArticulo;
+                            devolucion.Cantidad = cantidad;
+                            var contenido = new StringContent(JsonSerializer.Serialize(devolucion), Encoding.UTF8);
+                            contenido.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                            httpResponseMessage = await httpClient.PostAsync(urlDevoluciones + "AgregarDevolucion/", contenido);
+                            var idDevolucion = await httpResponseMessage.Content.ReadAsStringAsync();
+                            caja.StockIndividual -= cantidad;
+                            salidaPorReposicion.CajasSacadas = 0;
+                            salidaPorReposicion.UnidadesSacadas = cantidad;
+                            salidaPorReposicion.TotalPerdida = caja.PrecioUnitarioArt * cantidad;
+                            salidaPorReposicion.ClaveArticulo = caja.ClaveArticulo;
+                            salidaPorReposicion.IdDepartamento = Articulos.Where(b => b.Clave == caja.ClaveArticulo).First().Id;
+                            salidaPorReposicion.NombreArticulo = carrito.DescripcionArticulo;
+                            salidaPorReposicion.IdCaja = caja.Id;
+                            salidaPorReposicion.IdDevolucion = JsonSerializer.Deserialize<Devolucion>(idDevolucion.ToString(), new JsonSerializerOptions { PropertyNameCaseInsensitive = true }).Id.ToString();
+                            salidaPorReposicion.Razon = "Cancelacion parcial";
+                            var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+                            salidaPorReposicion.NombreEmpleado = localSettings.Values["Nombre"] + " " + localSettings.Values["ApPat"] + " " + localSettings.Values["ApMat"];
+                            salidaPorReposicion.FechaSalida = DateValue;
+                            salidaPorReposicion.TotalPerdidaSinIva = salidaPorReposicion.TotalPerdida / 1.16;
+                            SalidasPorCancelacion.Add(salidaPorReposicion);
+                        }
+                        else if (cantidad > caja.StockIndividual)
+                        {
+                            var cantidadACajas = (int)Math.Floor(cantidad / caja.Capacidad);
+
+                            var sobra = cantidad % caja.Capacidad;
+                            utilidad = (cantidadACajas * caja.Capacidad) * caja.PrecioUnitarioSinIVA + sobra * caja.PrecioUnitarioSinIVA;
+                            devolucion.IdCaja = caja.Id;
+                            devolucion.IdCarrito = carrito.Id;
+                            devolucion.Perdida = carrito.PrecioPublico * cantidad;
+                            devolucion.PerdidaSivIva = devolucion.Perdida / 1.16;
+                            devolucion.Razon = razon;
+                            devolucion.TipoCancelacion = tipoCancelacion;
+                            devolucion.Folio = carrito.Folio;
+                            devolucion.FechaDevolucion = DateTime.Now.ToString();
+                            devolucion.ClaveArticulo = carrito.ClaveArticulo;
+                            devolucion.DescripcionArticulo = carrito.DescripcionArticulo;
+                            devolucion.Cantidad = sobra;
+                            var contenido = new StringContent(JsonSerializer.Serialize(devolucion), Encoding.UTF8);
+                            contenido.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                            httpResponseMessage = await httpClient.PostAsync(urlDevoluciones + "AgregarDevolucion/", contenido);
+                            var idDevolucion = await httpResponseMessage.Content.ReadAsStringAsync();
+                            salidaPorReposicion.CajasSacadas = cantidadACajas;
+                            salidaPorReposicion.UnidadesSacadas = sobra;
+                            salidaPorReposicion.TotalPerdida = caja.PrecioUnitarioArt * cantidad;
+                            salidaPorReposicion.ClaveArticulo = caja.ClaveArticulo;
+                            salidaPorReposicion.IdDepartamento = Articulos.Where(b => b.Clave == caja.ClaveArticulo).First().Id;
+                            salidaPorReposicion.NombreArticulo = carrito.DescripcionArticulo;
+                            salidaPorReposicion.Razon = "Venta";
+                            salidaPorReposicion.IdDevolucion = JsonSerializer.Deserialize<Devolucion>(idDevolucion.ToString(), new JsonSerializerOptions { PropertyNameCaseInsensitive = true }).Id.ToString();
+                            var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+                            salidaPorReposicion.NombreEmpleado = localSettings.Values["Nombre"] + " " + localSettings.Values["ApPat"] + " " + localSettings.Values["ApMat"];
+                            salidaPorReposicion.FechaSalida = DateValue;
+                            salidaPorReposicion.IdCaja = caja.Id;
+
+                            salidaPorReposicion.TotalPerdidaSinIva = salidaPorReposicion.TotalPerdida / 1.16;
+                            SalidasPorCancelacion.Add(salidaPorReposicion);
+                            caja.CajasDisponibles -= cantidadACajas;
+                            if (sobra > caja.StockIndividual)
+                            {
+                                caja.CajasDisponibles--;
+                                caja.StockIndividual = caja.Capacidad - sobra;
+
+                            }
+
+                        }
+                        break;
+                    }
+                    else if (cantidad > caja.StockTotal && caja.StockTotal != 0)
+                    {
+                        cantidad = cantidad - caja.StockTotal;
+                        var cantidadACajas = (int)Math.Floor(cantidad / caja.Capacidad);
+                        var sobra = Math.Floor(cantidad % caja.Capacidad);
+                        if (Math.Floor(cantidad % caja.Capacidad) == 0)
+                        {
+
+                        }
+                        devolucion.IdCaja = caja.Id;
+                        devolucion.IdCarrito = carrito.Id;
+                        devolucion.Perdida = carrito.PrecioPublico * cantidad;
+                        devolucion.PerdidaSivIva = devolucion.Perdida / 1.16;
+                        devolucion.Razon = razon;
+                        devolucion.TipoCancelacion = tipoCancelacion;
+                        devolucion.Folio = carrito.Folio;
+                        devolucion.FechaDevolucion = DateTime.Now.ToString();
+                        devolucion.ClaveArticulo = carrito.ClaveArticulo;
+                        devolucion.DescripcionArticulo = carrito.DescripcionArticulo;
+                        devolucion.Cantidad = caja.StockTotal;
+                        var contenido = new StringContent(JsonSerializer.Serialize(devolucion), Encoding.UTF8);
+                        contenido.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                        httpResponseMessage = await httpClient.PostAsync(urlDevoluciones + "AgregarDevolucion/", contenido);
+                        var idDevolucion = await httpResponseMessage.Content.ReadAsStringAsync();
+                        salidaPorReposicion.CajasSacadas = cantidadACajas;
+                        salidaPorReposicion.UnidadesSacadas = caja.StockTotal;
+                        salidaPorReposicion.TotalPerdida = caja.PrecioUnitarioArt * cantidad;
+                        salidaPorReposicion.ClaveArticulo = caja.ClaveArticulo;
+                        salidaPorReposicion.IdDepartamento = Articulos.Where(b => b.Clave == caja.ClaveArticulo).FirstOrDefault().Id;
+                        salidaPorReposicion.NombreArticulo = carrito.DescripcionArticulo;
+                        salidaPorReposicion.Razon = "Venta";
+                        var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+                        salidaPorReposicion.NombreEmpleado = localSettings.Values["Nombre"] + " " + localSettings.Values["ApPat"] + " " + localSettings.Values["ApMat"];
+                        salidaPorReposicion.FechaSalida = DateValue;
+                        salidaPorReposicion.IdCaja = caja.Id;
+                        salidaPorReposicion.IdDevolucion = JsonSerializer.Deserialize<Devolucion>(idDevolucion.ToString(), new JsonSerializerOptions { PropertyNameCaseInsensitive = true }).Id.ToString();
+                        salidaPorReposicion.TotalPerdidaSinIva = salidaPorReposicion.TotalPerdida / 1.16;
+                        salidaPorReposicion.NombreDepartamento = ""; //Departamentos.Where(b => b.Id == salidaPorReposicion.IdDepartamento).FirstOrDefault().Nombre;
+                        SalidasPorCancelacion.Add(salidaPorReposicion);
+                        caja.StockTotal = 0;
+                        caja.CajasDisponibles = 0;
+                        caja.StockIndividual = 0;
+                    }
+
+                }
+
+            }
+            CajasModificadasArticulos.Add(listaCajasPorArticulo);
+            var json = JsonSerializer.Serialize(CajasModificadasArticulos[0]);
+            var content = new StringContent(json.ToString(), Encoding.UTF8);
+            content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+            httpResponseMessage = await httpClient.PostAsync(urlCajas + "ActualizarListaCajas/", content);
+
+            if (httpResponseMessage.IsSuccessStatusCode)
+            {
+                var me = new MessageDialog("Se realizo la reposicion del articulo: " + carrito.DescripcionArticulo, "Mensaje del sistema");
+                await me.ShowAsync();
+            }
+            else
+            {
+                var me = new MessageDialog("Hubo un prolema al realizar la reposicion " + await httpResponseMessage.Content.ReadAsStringAsync(), "Mensaje del sistema");
+                await me.ShowAsync();
+            }
+        }
+        else
+        {
+            var me = new MessageDialog("No hay inventario para el la cantidad solicitada del articulo: " + carrito.DescripcionArticulo + "\n" + "Stock disponible: " + stockTotal, "Mensaje del sistema");
+            await me.ShowAsync();
+            return;
+        }
+
+
+
+
+    }
+    public async Task CancelarTotalmenteAsync(Carrito carrito, double cantidad, string razon, string tipoCancelacion)
+    {
+
+        if (await Cancelar(carrito))
+        {
+            var md = new MessageDialog("Se cancelo la compra", "Mensaje del sistema");
+            var devolucion = new Devolucion();
+            devolucion.Razon = razon;
+            devolucion.TipoCancelacion = tipoCancelacion;
+            devolucion.IdCarrito = carrito.Id;
+            devolucion.Perdida = carrito.PrecioPublico * cantidad;
+            devolucion.PerdidaSivIva = devolucion.Perdida / 1.16;
+            devolucion.Cantidad = cantidad;
+            devolucion.ClaveArticulo = carrito.ClaveArticulo;
+            devolucion.DescripcionArticulo = carrito.DescripcionArticulo;
+            devolucion.Folio = carrito.Folio;
+            devolucion.FechaDevolucion = DateTime.Now.ToString();
+            var contenido = new StringContent(JsonSerializer.Serialize(devolucion), Encoding.UTF8);
+            contenido.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+            httpResponseMessage = httpClient.PostAsync(urlDevoluciones + "AgregarDevolucion/", contenido).Result;
+            if (httpResponseMessage.IsSuccessStatusCode)
+            {
+                foreach (var vs in VentasSeparadas)
+                {
+                    if (vs.Key.Id == carrito.Id)
+                    {
+                        foreach (var c in vs.Value)
+                        {
+                            c.RazonCancelado = carrito.RazonCancelado;
+                            c.Cantidad = carrito.Cantidad;
+                            c.Cancelado = carrito.Cancelado;
+                            c.SubTotal = carrito.SubTotal;
+
+                        }
+                    }
+                }
+                await md.ShowAsync();
+            }
+
+
+        }
+    }
+    public async Task<List<Devolucion>> GetDevolucionesAsync(string folio)
+    {
+        httpResponseMessage = await httpClient.GetAsync(urlDevoluciones + "GetDevoluciones/");
+        if (httpResponseMessage.IsSuccessStatusCode)
+        {
+            var lista = JsonSerializer.Deserialize<List<Devolucion>>(await httpResponseMessage.Content.ReadAsStringAsync(), new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            return lista.Where(b => b.Folio == Convert.ToInt32(folio)).ToList();
+        }
+        else { return null; }
+    }
+    public async Task<bool> Cancelar(Carrito carrito)
+    {
+        var content = new StringContent(JsonSerializer.Serialize(carrito), Encoding.UTF8);
+        content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+        httpResponseMessage = await httpClient.PostAsync(urlVentas + "CancelarCarrito/", content);
+
+
+        if (httpResponseMessage.IsSuccessStatusCode)
+        {
+            return true;
+        }
+        else
+            return false;
+    }
+    public async Task NuevaVentaAsync()
+    {
+        CajasModificadasArticulos = new List<List<CajaDispArticulo>>();
+        foreach (var itemCompra in Compra)
+        {
+            var listaCajasDisp = await DisponibilidadArticulo(itemCompra.ClaveArticulo);
+            double stockTotal = 0;
+            double utilidad = 0;
+            var auxCantidad = itemCompra.Cantidad;
+            foreach (var caja in listaCajasDisp)
+            {
+                stockTotal += caja.StockTotal;
+            }
+            foreach (var caja in listaCajasDisp)
+            {
+                if (stockTotal >= itemCompra.Cantidad)
+                {
+                    var carrito = new Carrito();
+                    var salidaPorVenta = new SalidaAlmacen();
+                    if (auxCantidad <= caja.StockTotal)
+                    {
+                        caja.StockTotal -= auxCantidad;
+                        carrito.Cantidad = auxCantidad;
+                        carrito.ClaveArticulo = caja.ClaveArticulo;
+                        carrito.DescripcionArticulo = itemCompra.DescripcionArticulo;
+                        carrito.MetodoDePago = "";
+                        carrito.Folio = 0;
+                        carrito.PrecioAlCosto = caja.PrecioUnitarioSinIVA;
+                        carrito.PrecioPublico = itemCompra.PrecioPublico;
+                        carrito.Utilidad = ((itemCompra.PrecioPublico / 1.16) - caja.PrecioUnitarioSinIVA) * auxCantidad;
+
+                        CompraPorUtilidad.Add(carrito);
+                        if (auxCantidad <= caja.StockIndividual)
+                        {
+                            caja.StockIndividual -= auxCantidad;
+                            salidaPorVenta.CajasSacadas = 0;
+                            salidaPorVenta.UnidadesSacadas = auxCantidad;
+                            salidaPorVenta.TotalPerdida = caja.PrecioUnitarioArt * auxCantidad;
+                            salidaPorVenta.ClaveArticulo = caja.ClaveArticulo;
+                            salidaPorVenta.IdDepartamento = Articulos.Where(b => b.Clave == caja.ClaveArticulo).First().Id;
+                            salidaPorVenta.NombreArticulo = itemCompra.DescripcionArticulo;
+                            salidaPorVenta.Razon = "Venta";
+                            var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+                            salidaPorVenta.NombreEmpleado = localSettings.Values["Nombre"] + " " + localSettings.Values["ApPat"] + " " + localSettings.Values["ApMat"];
+                            salidaPorVenta.FechaSalida = DateValue;
+                            salidaPorVenta.IdCaja = caja.Id;
+                            salidaPorVenta.IdDevolucion = "";
+                            salidaPorVenta.TotalPerdidaSinIva = salidaPorVenta.TotalPerdida / 1.16;
+                            SalidasPorVenta.Add(salidaPorVenta);
+                        }
+                        else if (itemCompra.Cantidad > caja.StockIndividual)
+                        {
+                            var cantidadACajas = (int)Math.Floor(auxCantidad / caja.Capacidad);
+
+                            var sobra = auxCantidad % caja.Capacidad;
+                            utilidad = (cantidadACajas * caja.Capacidad) * caja.PrecioUnitarioSinIVA + sobra * caja.PrecioUnitarioSinIVA;
+                            salidaPorVenta.CajasSacadas = cantidadACajas;
+                            salidaPorVenta.UnidadesSacadas = sobra;
+                            salidaPorVenta.TotalPerdida = caja.PrecioUnitarioArt * auxCantidad;
+                            salidaPorVenta.ClaveArticulo = caja.ClaveArticulo;
+                            salidaPorVenta.IdDepartamento = Articulos.Where(b => b.Clave == caja.ClaveArticulo).First().Id;
+                            salidaPorVenta.NombreArticulo = itemCompra.DescripcionArticulo;
+                            salidaPorVenta.Razon = "Venta";
+                            var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+                            salidaPorVenta.NombreEmpleado = localSettings.Values["Nombre"] + " " + localSettings.Values["ApPat"] + " " + localSettings.Values["ApMat"];
+                            salidaPorVenta.FechaSalida = DateValue;
+                            salidaPorVenta.IdCaja = caja.Id;
+                            salidaPorVenta.IdDevolucion = "";
+                            salidaPorVenta.TotalPerdidaSinIva = salidaPorVenta.TotalPerdida / 1.16;
+                            SalidasPorVenta.Add(salidaPorVenta);
+                            caja.CajasDisponibles -= cantidadACajas;
+                            if (sobra > caja.StockIndividual)
+                            {
+                                caja.CajasDisponibles--;
+                                caja.StockIndividual = caja.Capacidad - sobra;
+
+                            }
+
+                        }
+                        break;
+                    }
+                    else if (auxCantidad > caja.StockTotal && caja.StockTotal != 0)
+                    {
+                        auxCantidad = auxCantidad - caja.StockTotal;
+                        var cantidadACajas = (int)Math.Floor(auxCantidad / caja.Capacidad);
+                        var sobra = Math.Floor(auxCantidad % caja.Capacidad);
+                        if (Math.Floor(auxCantidad % caja.Capacidad) == 0)
+                        {
+
+                        }
+                        salidaPorVenta.CajasSacadas = cantidadACajas;
+                        salidaPorVenta.UnidadesSacadas = caja.StockIndividual;
+                        salidaPorVenta.TotalPerdida = caja.PrecioUnitarioArt * auxCantidad;
+                        salidaPorVenta.ClaveArticulo = caja.ClaveArticulo;
+                        salidaPorVenta.IdDepartamento = Articulos.Where(b => b.Clave == caja.ClaveArticulo).First().Id;
+                        salidaPorVenta.NombreArticulo = itemCompra.DescripcionArticulo;
+                        salidaPorVenta.Razon = "Venta";
+                        salidaPorVenta.IdCaja = caja.Id;
+                        var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+                        salidaPorVenta.NombreEmpleado = localSettings.Values["Nombre"] + " " + localSettings.Values["ApPat"] + " " + localSettings.Values["ApMat"];
+                        salidaPorVenta.FechaSalida = DateValue;
+                        salidaPorVenta.TotalPerdidaSinIva = salidaPorVenta.TotalPerdida / 1.16;
+                        salidaPorVenta.NombreDepartamento = Departamentos.Where(b => b.Id == salidaPorVenta.IdDepartamento).First().Nombre;
+                        salidaPorVenta.IdDevolucion = "";
+                        SalidasPorVenta.Add(salidaPorVenta);
+                        carrito.Utilidad = ((itemCompra.PrecioPublico / 1.16) - caja.PrecioUnitarioSinIVA) * caja.StockTotal;
+                        carrito.SubTotal = caja.StockTotal * itemCompra.PrecioPublico;
+                        carrito.Cantidad = caja.StockTotal;
+                        caja.StockTotal = 0;
+                        caja.CajasDisponibles = 0;
+                        caja.StockIndividual = 0;
+                        carrito.ClaveArticulo = caja.ClaveArticulo;
+                        carrito.DescripcionArticulo = itemCompra.DescripcionArticulo;
+                        carrito.MetodoDePago = "";
+                        carrito.Folio = 0;
+                        carrito.PrecioAlCosto = caja.PrecioUnitarioSinIVA;
+                        carrito.PrecioPublico = itemCompra.PrecioPublico;
+                        carrito.RazonCancelado = "";
+                        carrito.Cancelado = "No";
+                        CompraPorUtilidad.Add(carrito);
+
+                    }
+
+                }
+                else
+                {
+                    var me = new MessageDialog("No hay inventario para el la cantidad solicitada del articulo: " + itemCompra.DescripcionArticulo + "\n" + "Stock disponible: " + stockTotal, "Mensaje del sistema");
+                    await me.ShowAsync();
+                    return;
+                }
+            }
+            CajasModificadasArticulos.Add(listaCajasDisp);
+        }
+
+        if (Compra.Count > 0)
+        {
+            foreach (var c in Compra)
+            {
+                if (Tarjeta)
+                {
+                    c.MetodoDePago = "Tarjeta";
+                }
+                else
+                {
+                    c.MetodoDePago = "Efectivo";
+                }
+            }
+            httpClient = new HttpClient();
+            var json = JsonSerializer.Serialize(Compra);
+            var content = new StringContent(json, Encoding.UTF8);
+            content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+            httpResponseMessage = await httpClient.PostAsync(urlVentas + "AgregarVenta", content);
+            if (httpResponseMessage.IsSuccessStatusCode)
+            {
+                var folio = await httpResponseMessage.Content.ReadAsStringAsync();
+                foreach (var spv in SalidasPorVenta)
+                {
+                    spv.FolioVenta = folio.ToString();
+                }
+                if (await ReducirStockPorVentaAsync())
+                {
+                    var arr = JsonSerializer.Serialize(SalidasPorVenta);
+                    content = new StringContent(arr.ToString(), Encoding.UTF8);
+                    content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                    httpResponseMessage = await httpClient.PostAsync(urlSalidas + "AgregarSalidasVenta", content);
+                    if (httpResponseMessage.IsSuccessStatusCode)
+                    {
+                        var mens = new MessageDialog("La venta se realizo con el folio: " + folio.ToString(), "Mensaje del Sistema");
+                        await mens.ShowAsync();
+                        Compra = new ObservableCollection<Carrito>();
+                        SalidasPorVenta = new List<SalidaAlmacen>();
+                    }
+
+
+                }
+            }
+        }
+        else
+        {
+            var mens = new MessageDialog("No hay articulos en el carrito", "Mensaje del Sistema");
+            await mens.ShowAsync();
+        }
+
+    }
+    public List<List<CajaDispArticulo>> CajasModificadasArticulos { get; set; }
+    public async void DisponibilidadStockAsync(string clave)
+    {
+        httpResponseMessage = httpClient.GetAsync(urlCajas + "DisponibilidadArticulo/" + clave).Result;
+        if (httpResponseMessage.IsSuccessStatusCode)
+        {
+            Lista = JsonSerializer.Deserialize<List<CajaDispArticulo>>(await httpResponseMessage.Content.ReadAsStringAsync(), new JsonSerializerOptions { PropertyNameCaseInsensitive = true }).OrderBy(b => b.PrecioUnitarioSinIVA).ToList();
+        }
+    }
+    public async Task<bool> ReducirStockPorVentaAsync()
+    {
+        var json = JsonSerializer.Serialize(CajasModificadasArticulos);
+        var content = new StringContent(json.ToString(), Encoding.UTF8);
+        content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+        httpResponseMessage = await httpClient.PostAsync(urlCajas + "ActualizarTodasCajas/", content);
+        if (httpResponseMessage.IsSuccessStatusCode)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    public async Task<List<CajaDispArticulo>> DisponibilidadArticulo(string clave)
+    {
+        httpResponseMessage = await httpClient.GetAsync(urlCajas + "DisponibilidadArticulo/" + clave);
+        if (httpResponseMessage.IsSuccessStatusCode)
+        {
+            return JsonSerializer.Deserialize<List<CajaDispArticulo>>(await httpResponseMessage.Content.ReadAsStringAsync(), new JsonSerializerOptions { PropertyNameCaseInsensitive = true }).OrderBy(b => b.PrecioUnitarioSinIVA).ToList();
+        }
+        else
+        {
+            return new List<CajaDispArticulo>();
+        }
+    }
+
+    private void ExportarAExcel()
+    {
+        using (var workbook = new XLWorkbook())
+        {
+            var worksheet = workbook.Worksheets.Add("DEVOLUCIONES");
+            var cont = 4;
+            double totalDeDevolucion = 0;
+            double totalDevolucionSinIva = 0;
+            var contFac = 0;
+            worksheet.Cell("B1").Value = "DEVOLUCIONES REALIZADAS DESDE: " + Desde.ToString() + " hasta: " + Hasta.ToString();
+            worksheet.Cell("A3").Value = "Numero de devolucion";
+            worksheet.Cell("B3").Value = "Folio de venta";
+            worksheet.Cell("C3").Value = "Total de perdida";
+            worksheet.Cell("D3").Value = "Total de perdida sin IVA";
+            worksheet.Cell("E3").Value = "Tipo de devolucion";
+            worksheet.Cell("F3").Value = "Razon de la devolucion";
+            foreach (var devolucion in ListaDevoluciones)
+            {
+                worksheet.Cell("A" + cont.ToString()).Value = devolucion.Id;
+                worksheet.Cell("B" + cont.ToString()).Value = devolucion.Folio;
+                worksheet.Cell("C" + cont.ToString()).Value = devolucion.TipoCancelacion;
+                worksheet.Cell("D" + cont.ToString()).Value = devolucion.Razon;
+                worksheet.Cell("E" + cont.ToString()).Value = devolucion.PerdidaSivIva;
+                worksheet.Cell("F" + cont.ToString()).Value = devolucion.Perdida;
+                totalDeDevolucion += devolucion.Perdida;
+                totalDevolucionSinIva += devolucion.PerdidaSivIva;
+                cont++;
+
+            }
+
+            worksheet.Cell("E" + cont.ToString()).Value = "Total de perdida sin IVA: " + "$" + totalDevolucionSinIva;
+            worksheet.Cell("F" + cont.ToString()).Value = "Total de perdida: " + "$" + totalDeDevolucion;
+            worksheet.Column(1).Width = 30;
+            worksheet.Column(2).Width = 30;
+            worksheet.Column(3).Width = 30;
+            worksheet.Column(4).Width = 30;
+            worksheet.Column(5).Width = 30;
+            worksheet.Column(6).Width = 30;
+            worksheet.Column(7).Width = 30;
+            var range = worksheet.Range(worksheet.Cell("A3"), worksheet.LastCellUsed());
+            worksheet.Style.Font.SetFontName("Arial");
+            worksheet.Style.Font.SetFontSize(12);
+            worksheet.Style.Font.FontFamilyNumbering = XLFontFamilyNumberingValues.Roman;
+            var table = range.CreateTable("DEVOLUCIONES REALIZADAS DESDE: " + Desde.ToString() + " hasta: " + Hasta.ToString());
+
+            StorageFolder localFolder = ApplicationData.Current.LocalFolder;
+
+            string dir = localFolder.Path + "\\Devoluciones.xlsx";
+            try
+            {
+                workbook.SaveAs(dir);
+                var md = new MessageDialog("Excel generado correctamente", "Mensaje del Sistema");
+                md.ShowAsync();
+            }
+            catch (Exception e)
+            {
+                var md = new MessageDialog("Hubo un problema al generar el archivo " + e.Message, "Mensaje del Sistema");
+                md.ShowAsync();
+            }
+
+        }
+    }
+
+}
+
+
+

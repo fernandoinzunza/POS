@@ -46,6 +46,7 @@ namespace POS.Views
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+           
             var seleccionado = data.SelectedItem;
             Button route = e.OriginalSource as Button;
             var s = route.DataContext as EntradaAlmacen;
@@ -61,6 +62,11 @@ namespace POS.Views
         private void dataGrid_CurrentCellChanged(object sender, EventArgs e)
         {
             seleccionado = sender as EntradaAlmacen;
+        }
+
+        private void window_Loading(FrameworkElement sender, object args)
+        {
+
         }
     }
 }

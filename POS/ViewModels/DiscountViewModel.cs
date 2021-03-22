@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using Windows.UI.Popups;
 using POS.Models;
 using System.Net.Http.Headers;
+using System.Collections.ObjectModel;
+using Windows.UI.Xaml.Controls;
 
 namespace POS.ViewModels
 {
@@ -20,7 +22,7 @@ namespace POS.ViewModels
 
         public string nombre;
         public double porcentaje;
-        public List<Descuento> descuentos;
+        public ObservableCollection<Descuento> descuentos;
 
         public Dictionary<Descuento, Dictionary<Usuario, bool>> cambioSeleccion;
         public string Nombre
@@ -28,16 +30,17 @@ namespace POS.ViewModels
             get { return nombre; }
             set { SetProperty(ref nombre, value); }
         }
-        public List<DescuentosPermitidos> DescuentosPermitidos
+        public ObservableCollection<Descuento> AuxDescuentos
         {
             get; set;
         }
+
         public double Porcentaje
         {
             get { return porcentaje; }
             set { SetProperty(ref porcentaje, value); }
         }
-        public List<Descuento> Descuentos
+        public ObservableCollection<Descuento> Descuentos
         {
             get { return descuentos; }
             set { SetProperty(ref descuentos, value); }
@@ -49,6 +52,7 @@ namespace POS.ViewModels
         }
         public RelayCommand NuevoDescuento { get; set; }
         public RelayCommand Quitar { get; set; }
+        public RelayCommand BuscarDescuento { get; set; }
         public Dictionary<Usuario, Seleccionado> Seleccionados
         {
             get { return seleccionados; }
@@ -63,16 +67,11 @@ namespace POS.ViewModels
             HttpResponseMessage res = httpClient.GetAsync(url + "Usuarios/GetUsuarios/").Result;
             Usuarios = JsonSerializer.Deserialize<List<Usuario>>(res.Content.ReadAsStringAsync().Result, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
             Seleccionados = new Dictionary<Usuario, Seleccionado>();
+            AuxDescuentos = new ObservableCollection<Descuento>();
             CambioSeleccion = new Dictionary<Descuento, Dictionary<Usuario, bool>>();
             Porcentaje = 0;
-            DescuentosPermitidos = new List<DescuentosPermitidos>();
             httpClient = new HttpClient();
-            res = httpClient.GetAsync(url + "DescuentosPermitidos/GetDescPermitidos/").Result;
-            var cadena = res.Content.ReadAsStringAsync().Result;
-            if (cadena.Length > 0)
-            {
-                DescuentosPermitidos = JsonSerializer.Deserialize<List<DescuentosPermitidos>>(res.Content.ReadAsStringAsync().Result, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-            }
+
             foreach (var u in Usuarios)
             {
                 Seleccionados.Add(u, new Seleccionado { Permitido = true });
@@ -82,34 +81,31 @@ namespace POS.ViewModels
 
 
             NuevoDescuento = new RelayCommand(o => { AgregarDescuento(); });
-            Descuentos = new List<Descuento>();
+            Descuentos = new ObservableCollection<Descuento>();
             httpClient = new HttpClient();
             HttpResponseMessage httpResponseMessage = httpClient.GetAsync(url + "Descuentos/GetDescuentos/").Result;
-            Descuentos = JsonSerializer.Deserialize<List<Descuento>>(httpResponseMessage.Content.ReadAsStringAsync().Result, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-            foreach (var d in Descuentos)
-            {
-                var lista = new Dictionary<Usuario, bool>();
-                foreach (var dp in DescuentosPermitidos)
-                {
-                    if (d.NoDescuento == dp.IdDescuento)
-                    {
-                        foreach (var u in Usuarios)
-                        {
-                            if (u.NoEmpleado == dp.NoEmpleado)
-                                lista.Add(u, true);
-                            else
-                                lista.Add(u, false);
-                        }
-                    }
-                }
-                CambioSeleccion.Add(d, lista);
-            }
+            Descuentos = new ObservableCollection<Descuento>(JsonSerializer.Deserialize<List<Descuento>>(httpResponseMessage.Content.ReadAsStringAsync().Result, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }));
+            AuxDescuentos = new ObservableCollection<Descuento>(Descuentos);
             Quitar = new RelayCommand(QuitarUsuario);
+            BuscarDescuento = new RelayCommand(BuscarDesc);
         }
-        private void AgregarDescuento()
+        private  void BuscarDesc(object obj)
+        {
+            var sender = obj as Windows.UI.Xaml.Input.KeyRoutedEventArgs;
+            var textbox = sender.OriginalSource as TextBox;
+            if (textbox.Text == "")
+            {
+                Descuentos = new ObservableCollection<Descuento>(AuxDescuentos);
+            }
+            else
+            {
+                Descuentos = new ObservableCollection<Descuento>(Descuentos.Where(b => b.NombreDescuento.ToUpper().Contains(textbox.Text.ToUpper())));
+            }
+        }
+        private async void AgregarDescuento()
         {
             var descuento = new Descuento();
-            descuento.Nombre = Nombre;
+            descuento.NombreDescuento = Nombre;
             descuento.Porcentaje = Porcentaje;
             var json = JsonSerializer.Serialize(descuento);
 
@@ -119,47 +115,9 @@ namespace POS.ViewModels
             HttpResponseMessage resp = httpClient.PostAsync(url + "Descuentos/AgregarDescuento/", content).Result;
             if (resp.IsSuccessStatusCode)
             {
-                var id = JsonSerializer.Deserialize<Descuento>(resp.Content.ReadAsStringAsync().Result, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                httpClient = new HttpClient();
-                var newDicc = new Dictionary<Usuario, Seleccionado>();
-                foreach (var s in Seleccionados)
-                {
-                    newDicc.Add(s.Key, s.Value);
-                }
-
-                json = JsonSerializer.Serialize(newDicc.ToList());
-                MessageDialog v = new MessageDialog(json);
-                content = new StringContent(json.ToString(), Encoding.UTF8);
-                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                resp = httpClient.PostAsync(url + "DescuentosPermitidos/AgregarDescPermitido/" + id.NoDescuento.ToString(), content).Result;
-
-                if (resp.IsSuccessStatusCode)
-                {
-                    CambioSeleccion = new Dictionary<Descuento, Dictionary<Usuario, bool>>();
-                    Descuentos.Add(descuento);
-                    foreach (var d in Descuentos)
-                    {
-                        var lista = new Dictionary<Usuario, bool>();
-                        foreach (var p in DescuentosPermitidos)
-                        {
-
-                            if (d.NoDescuento == p.IdDescuento)
-                            {
-                                var usuario = Usuarios.Where(b => b.NoEmpleado == p.NoEmpleado).First();
-                                lista.Add(usuario, true);
-
-                            }
-
-                        }
-                        CambioSeleccion.Add(d, lista);
-                    }
-                    var dialog = new MessageDialog("Descuento agregado exitosamente!", "Mensaje");
-                    var mensaje = dialog.ShowAsync();
-                    Nombre = "";
-                    Porcentaje = 0;
-                }
-
-
+                var md = new MessageDialog("Se agrego el descuento correctamente", "Mensaje del sistema");
+                await md.ShowAsync();
+                  
             }
 
         }

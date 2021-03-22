@@ -1,4 +1,5 @@
-﻿using System;
+﻿using POS.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,6 +26,8 @@ namespace POS.Views
         public SalidaAlmacen()
         {
             this.InitializeComponent();
+            var vm = new InventoryViewModel();
+            this.DataContext = vm;
         }
     }
 }

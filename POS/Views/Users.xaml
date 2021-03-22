@@ -1,0 +1,49 @@
+﻿<Page
+    x:Class="POS.Views.Users"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:POS.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:winui="using:Microsoft.UI.Xaml.Controls"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <winui:NavigationView SelectionChanged="rootNavigationView_SelectionChanged" BackRequested="rootNavigationView_BackRequested" Grid.Row="0" IsTitleBarAutoPaddingEnabled="False"  x:Name="rootNavigationView" Background="Transparent" IsBackButtonVisible="Auto" IsBackEnabled="True" IsSettingsVisible="False" PaneDisplayMode="Left">
+            <winui:NavigationView.Resources>
+                <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="#32a852"/>
+                <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="#32a852" />
+                <SolidColorBrush x:Key="NavigationViewItemForeground" Color="White"/>
+                <SolidColorBrush x:Key="NavigationViewItemForegroundSelected" Color="White"/>
+                <SolidColorBrush x:Key="NavigationViewItemForegroundPointerOver" Color="White"/>
+                <SolidColorBrush Color="#79d279" x:Key="NavigationViewItemBackgroundSelected"/>
+                <SolidColorBrush x:Key="NavigationViewItemBackgroundPointerOver" Color="#79d279"/>
+                <SolidColorBrush x:Key="NavigationViewItemForegroundSelectedPointerOver" Color="White"/>
+                <SolidColorBrush x:Key="NavigationViewSelectionIndicatorForeground" Color="#39ac39"/>
+                <SolidColorBrush x:Key="SystemControlForegroundBaseHighBrush" Color="White"></SolidColorBrush>
+            </winui:NavigationView.Resources>
+            <winui:NavigationView.MenuItems>
+                <winui:NavigationViewItem Content="Agregar un usuario" Icon="Add" Tag="NewUser" />
+                <winui:NavigationViewItem Content="Ver usuarios" Tag="UsersList">
+                    <winui:NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE709;"/>
+                    </winui:NavigationViewItem.Icon>
+                </winui:NavigationViewItem>
+
+            </winui:NavigationView.MenuItems>
+            <Frame Margin="40 80 40 0" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="contentFrame" FontSize="20" Content="Haz click en una pestaña para cambiar de pantalla"/>
+        </winui:NavigationView>
+        <Grid Height="32" VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid x:Name="DragGrid" Grid.Column="0" Background="Transparent">
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>

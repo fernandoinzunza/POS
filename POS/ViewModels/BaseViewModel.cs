@@ -45,6 +45,5 @@ namespace POS.ViewModels
         }
 
 
-
     }
 }

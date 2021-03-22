@@ -23,15 +23,28 @@ namespace POS.Models
         public string NombreMoneda { get; set; }
         public double Cantidad { get; set; }
         public double PrecioUnitario { get; set; }
+        public double PrecioXCaja { get; set; }
         public double CostoTotal { get; set; }
         public int NoEmpleado { get; set; }
         public string NombreEmpleado { get; set; }
         public string NoFactura { get; set; }
-
-      
+        public double StockIndividual { get; set; }     
         public string Caja { get; set; }
         public double UnidadesXCaja { get; set; }
-        public int CajasStock { get; set; } 
+        public int CajasStock { get; set; }
+        public double PrecioXCajaSinIva
+        {
+            get;set;
+        }
+        public double PrecioUnitarioSinIVA
+        {
+            get;set;
+        }
+        public double CostoTotalSinIVA
+        {
+            get; set;
+        }
+
 
     }
 }

@@ -10,6 +10,7 @@
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mc:Ignorable="d"  
     x:Name="window"
+    Loading="window_Loading"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
         <local:StringFormatConverter x:Key="StringFormatConverter"/>
@@ -63,7 +64,7 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <ComboBox IsEnabled="{Binding MismaFactura}" CornerRadius="0" SelectedItem="{Binding ComboProveedor, Mode=TwoWay}" Margin="40 0 40 0" HorizontalAlignment="Stretch" Header="Selecciona al proveedor" PlaceholderText="Articulo" Grid.Row="3" Grid.Column="1" IsTextSearchEnabled="True" ItemsSource="{Binding Proveedores}" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2">
+        <ComboBox IsEnabled="{Binding MismaFactura}" CornerRadius="0" SelectedItem="{Binding ComboProveedor, Mode=TwoWay}" Margin="40 0 40 0" HorizontalAlignment="Stretch" Header="Selecciona al proveedor" PlaceholderText="Proveedor" Grid.Row="3" Grid.Column="1" IsTextSearchEnabled="True" ItemsSource="{Binding Proveedores}" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -73,7 +74,7 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <ComboBox CornerRadius="0" SelectedItem="{Binding ComboMoneda,Mode=TwoWay}" Margin="40 0 40 0" HorizontalAlignment="Stretch" Header="Selecciona la moneda" PlaceholderText="Moneda" Grid.Row="4" Grid.Column="0" IsTextSearchEnabled="True" ItemsSource="{Binding Monedas}" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2">
+        <ComboBox CornerRadius="0" SelectedItem="{Binding ComboMoneda,Mode=TwoWay}" Margin="40 0 40 0" HorizontalAlignment="Stretch" Header="Moneda:" SelectedIndex="0" IsEnabled="False" PlaceholderText="Moneda" Grid.Row="4" Grid.Column="0" IsTextSearchEnabled="True" ItemsSource="{Binding Monedas}" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -84,40 +85,39 @@
             </ComboBox.ItemTemplate>
         </ComboBox>
         <StackPanel HorizontalAlignment="Stretch" Margin="40 0 40 0" Orientation="Horizontal" Spacing="10" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">
-            <CheckBox Checked="CheckBox_Checked" IsChecked="{Binding PorCaja,Mode=TwoWay}" Content="Compra por caja?" VerticalContentAlignment="Center"></CheckBox>
-            <winui:NumberBox IsEnabled="{Binding PorCaja}"  SpinButtonPlacementMode="Inline" HorizontalAlignment="Stretch" FontSize="14" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Margin="40 0 40 0" Grid.Row="5" Grid.Column="0" Header="Unidades por caja" Value="{Binding UnidadXCajas, Mode=TwoWay}"></winui:NumberBox>
-            <winui:NumberBox IsEnabled="{Binding PorCaja}" SpinButtonPlacementMode="Inline" FontSize="14" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Margin="40 0 40 0" Grid.Row="6" Grid.Column="0" Header="Cantidad de cajas compradas:" Value="{Binding CantidadCajasCompradas, Mode=TwoWay}"></winui:NumberBox>
-            <winui:NumberBox IsEnabled="{Binding PorCaja}" SpinButtonPlacementMode="Inline" FontSize="14" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Margin="40 0 40 0" Grid.Row="6" Grid.Column="0" Header="Precio por caja:" Value="{Binding PrecioXCaja, Mode=TwoWay}"></winui:NumberBox>
+            <CheckBox FontFamily="Arial" Checked="CheckBox_Checked" IsChecked="{Binding PorCaja,Mode=TwoWay}" Content="Compra por caja?" VerticalContentAlignment="Center"></CheckBox>
+            <winui:NumberBox ValidationMode="InvalidInputOverwritten" Minimum="1" IsEnabled="{Binding PorCaja}"  SpinButtonPlacementMode="Inline" HorizontalAlignment="Stretch" FontSize="14" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Margin="40 0 40 0" Grid.Row="5" Grid.Column="0" Header="Unidades por caja" Value="{Binding UnidadXCajas, Mode=TwoWay}"></winui:NumberBox>
+            <winui:NumberBox ValidationMode="InvalidInputOverwritten" Minimum="0" IsEnabled="{Binding PorCaja}" SpinButtonPlacementMode="Inline" FontSize="14" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Margin="40 0 40 0" Grid.Row="6" Grid.Column="0" Header="Cantidad de cajas compradas:" Value="{Binding CantidadCajasCompradas, Mode=TwoWay}"></winui:NumberBox>
+            <winui:NumberBox ValidationMode="InvalidInputOverwritten" Minimum="1"  SpinButtonPlacementMode="Inline" FontSize="14" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Margin="40 0 40 0" Grid.Row="6" Grid.Column="0" Header="Precio:" Value="{Binding PrecioXCaja, Mode=TwoWay}"></winui:NumberBox>
+            <winui:NumberBox ValidationMode="InvalidInputOverwritten" Minimum="0"  SpinButtonPlacementMode="Inline" FontSize="14" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Margin="40 0 40 0" Grid.Row="6" Grid.Column="0" Header="Individual comprado:" Value="{Binding StockIndividualAEntrar, Mode=TwoWay}"></winui:NumberBox>
         </StackPanel>
-        <winui:NumberBox IsEnabled="{Binding PorUnidad,Mode=TwoWay}" FontSize="14" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Margin="40 0 40 0" Grid.Row="6" Grid.Column="0" Header="Cantidad en unidades:" Value="{Binding Cantidad, Mode=TwoWay}"></winui:NumberBox>
-        <winui:NumberBox IsEnabled="{Binding PorUnidad}" FontSize="14" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Margin="40 0 40 0" Grid.Row="6" Grid.Column="1" Header="Costo unitario" Value="{Binding PrecioUnitario,Mode=TwoWay}"></winui:NumberBox>
-        <winui:NumberBox IsEnabled="False" Grid.ColumnSpan="2" FontSize="14" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Margin="40 0 40 0" Grid.Row="7" Grid.Column="0" Header="Costo total" Value="{Binding CostoTotal,Mode=TwoWay}"></winui:NumberBox>
+        <winui:NumberBox ValidationMode="InvalidInputOverwritten" IsEnabled="False" FontSize="14" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Margin="40 0 40 0" Grid.Row="6" Grid.Column="0" Header="Costo unitario" Value="{Binding PrecioUnitario,Mode=TwoWay}"></winui:NumberBox>
+        <winui:NumberBox ValidationMode="InvalidInputOverwritten" IsEnabled="False" Grid.ColumnSpan="2" FontSize="14" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Margin="40 0 40 0" Grid.Row="7" Grid.Column="0" Header="Costo total" Value="{Binding CostoTotal,Mode=TwoWay}"></winui:NumberBox>
         <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" HorizontalAlignment='Right' Grid.Row="8" Grid.Column="0">
-            <Button FontFamily="Arial" Command="{Binding EntradaGrid}" CommandParameter="{Binding}"   CornerRadius="0"  Background="#0377fc" Foreground="White" Margin="40 0 40 0" Content="Agregar entrada"></Button>
+            <Button FontFamily="Arial" Command="{Binding EntradaGrid}" CommandParameter="{Binding}"   CornerRadius="0"  Background="#32a852" Foreground="White" Margin="40 0 40 0" Content="Agregar entrada"></Button>
             <Button FontFamily="Arial" Command="{Binding BorrarLista}" CommandParameter="{Binding}"   CornerRadius="0"   Margin="0 0 40 0" Content="Cancelar"></Button>
         </StackPanel>
-        <controls:DataGrid SelectionMode="Extended" CurrentCellChanged="dataGrid_CurrentCellChanged" SelectionChanged="dataGrid_SelectionChanged" FontFamily="Arial" FontSize="10"   GridLinesVisibility="All" Grid.ColumnSpan="2" ColumnWidth="*" Name="dataGrid"  Margin="40 0 40 0" AutoGenerateColumns="False" Grid.Column="0" Grid.Row="9" ItemsSource="{Binding Path=ListaTemporal,Mode=TwoWay}">
+        <controls:DataGrid  BorderBrush="Gray" BorderThickness="2" AlternatingRowBackground="LightGray" SelectionMode="Extended" CurrentCellChanged="dataGrid_CurrentCellChanged" SelectionChanged="dataGrid_SelectionChanged" FontFamily="Arial" FontSize="10"   GridLinesVisibility="All" Grid.ColumnSpan="2" ColumnWidth="*" Name="dataGrid"  Margin="40 0 40 0" AutoGenerateColumns="False" Grid.Column="0" Grid.Row="9" ItemsSource="{Binding Path=ListaTemporal,Mode=TwoWay}">
             <controls:DataGrid.Columns>
-                <controls:DataGridTextColumn Header="No Factura" IsReadOnly="True"  Binding="{Binding NoFactura}">
+                <controls:DataGridTextColumn Header="No Factura"   Binding="{Binding NoFactura}">
                 </controls:DataGridTextColumn>
-                <controls:DataGridTextColumn Header="Articulo" IsReadOnly="True"  Binding="{Binding Articulo}">
+                <controls:DataGridTextColumn Header="Articulo"   Binding="{Binding Articulo}">
                 </controls:DataGridTextColumn>
-                <controls:DataGridTextColumn Header="Proveedor" IsReadOnly="True"  Binding="{Binding NombreProveedor}">
+                <controls:DataGridTextColumn Header="Proveedor"   Binding="{Binding NombreProveedor}">
                 </controls:DataGridTextColumn>
-                <controls:DataGridTextColumn Header="Por caja" IsReadOnly="True"  Binding="{Binding Caja}">
+                
+                <controls:DataGridTextColumn Header="Unidades x caja"   Binding="{Binding UnidadesXCaja}">
                 </controls:DataGridTextColumn>
-                <controls:DataGridTextColumn Header="Unidades x caja" IsReadOnly="True"  Binding="{Binding UnidadesXCaja}">
+                <controls:DataGridTextColumn Header="No. cajas"   Binding="{Binding CajasStock}">
                 </controls:DataGridTextColumn>
-                <controls:DataGridTextColumn Header="No. cajas" IsReadOnly="True"  Binding="{Binding CajasStock}">
+                <controls:DataGridTextColumn Header="Cantidad total"  Binding="{Binding Cantidad}">
                 </controls:DataGridTextColumn>
-                <controls:DataGridTextColumn Header="Cantidad total" IsReadOnly="True"  Binding="{Binding Cantidad}">
-                </controls:DataGridTextColumn>
-                <controls:DataGridTextColumn Header="Precio Unitario" IsReadOnly="True"  Binding="{Binding PrecioUnitario}">
+                <controls:DataGridTextColumn Header="Precio Unitario"  Binding="{Binding PrecioUnitario}">
                 </controls:DataGridTextColumn>
                 <controls:DataGridTemplateColumn Header="Accion">
                     <controls:DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <Button Content="Quitar" Background="Red" Margin="4" Click="Button_Click" HorizontalAlignment="Stretch" FontSize="10" Foreground="White"/>
+                            <Button Content="Quitar" Background="#f54242" CornerRadius="0" Margin="4" Click="Button_Click" HorizontalAlignment="Stretch" FontSize="10" Foreground="White"/>
                         </DataTemplate>
                     </controls:DataGridTemplateColumn.CellEditingTemplate>
                 </controls:DataGridTemplateColumn>
@@ -128,7 +128,6 @@
             </Run>
             <Run Text="{Binding TotalCompra}"></Run>
         </TextBlock>
-        
-        <Button FontFamily="Arial" Command="{Binding AgregarEntrada}"  CornerRadius="0" Grid.Row="11" Background="#0377fc" Foreground="White" HorizontalAlignment="Stretch" Margin="40 0 40 0"  Grid.ColumnSpan="2" Content="Finalizar"></Button>
+        <Button FontFamily="Arial" Command="{Binding AgregarEntrada}"  CornerRadius="0" Grid.Row="11" Background="#32a852" Foreground="White" HorizontalAlignment="Stretch" Margin="40 0 40 0"  Grid.ColumnSpan="2" Content="Finalizar"></Button>
     </Grid>
 </Page>

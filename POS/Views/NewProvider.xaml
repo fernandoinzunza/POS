@@ -31,6 +31,6 @@
         <TextBox Header="Nombre de contacto:" FontFamily="Arial"  BorderBrush="Gray" Text="{Binding Contacto,Mode=TwoWay}" BorderThickness="2" CornerRadius="0" Grid.Row="4"   PlaceholderText="Contacto"></TextBox>
         <TextBox Header="Telefono de contacto:" FontFamily="Arial"  BorderBrush="Gray" Text="{Binding Telefono, Mode=TwoWay}" BorderThickness="2" CornerRadius="0" Grid.Row="5"   PlaceholderText="Telefono"></TextBox>
         <TextBox Header="Correo electronico:" FontFamily="Arial"  BorderBrush="Gray" Text="{Binding Correo, Mode=TwoWay}" BorderThickness="2" CornerRadius="0" Grid.Row="6"   PlaceholderText="Correo electronico"></TextBox>
-        <Button Content="Agregar" Command="{Binding AgregarProveedor}" HorizontalAlignment="Stretch"  Grid.Row="7" Background="#0377fc" Foreground="White"></Button>
+        <Button Content="Agregar" Command="{Binding AgregarProveedor}" HorizontalAlignment="Stretch"  Grid.Row="7" Background="#32a852" Foreground="White"></Button>
     </Grid>
 </Page>

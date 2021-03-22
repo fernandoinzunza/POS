@@ -23,15 +23,20 @@ namespace POS.Views
     /// </summary>
     public sealed partial class ArticlePage : Page
     {
+        Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+
         public ArticlePage()
         {
             InitializeComponent();
-          var coreTitleBar =  CoreApplication.GetCurrentView().TitleBar;
+            var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = true;
-           
+
             coreTitleBar.LayoutMetricsChanged += CoreTitleBar_LayoutMetricsChanged;
             // Set XAML element as a draggable region.
             Window.Current.SetTitleBar(DragGrid);
+            nuevoArticulo.IsEnabled = (bool)localSettings.Values["NuevoArticulo"];
+            nuevoDescuento.IsEnabled = (bool)localSettings.Values["NuevoDescuento"];
+
         }
 
         private void CoreTitleBar_LayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args)
@@ -41,13 +46,13 @@ namespace POS.Views
 
         private void NavigationView_SelectionChanged(Microsoft.UI.Xaml.Controls.NavigationView sender, Microsoft.UI.Xaml.Controls.NavigationViewSelectionChangedEventArgs args)
         {
-            
+
             Microsoft.UI.Xaml.Controls.NavigationViewItem nvi = args.SelectedItem as Microsoft.UI.Xaml.Controls.NavigationViewItem;
-            if(nvi.Tag.ToString() !="")
+            if (nvi.Tag.ToString() != "")
             {
                 contentFrame.HorizontalAlignment = HorizontalAlignment.Stretch;
                 contentFrame.VerticalAlignment = VerticalAlignment.Stretch;
-            }               
+            }
             switch (nvi.Tag.ToString())
             {
                 case "NewArticle":
@@ -74,6 +79,21 @@ namespace POS.Views
                 case "NewMeasureUnity":
                     {
                         contentFrame.Navigate(typeof(NewMeasureUnity));
+                        break;
+                    }
+                case "UnitiesList":
+                    {
+                        contentFrame.Navigate(typeof(UnitiesList));
+                        break;
+                    }
+                case "NewDiscount":
+                    {
+                        contentFrame.Navigate(typeof(NewDiscount));
+                        break;
+                    }
+                case "DiscountList":
+                    {
+                        contentFrame.Navigate(typeof(DiscountList));
                         break;
                     }
             }

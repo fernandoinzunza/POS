@@ -12,33 +12,11 @@
     <Page.DataContext>
         <local:DiscountViewModel></local:DiscountViewModel>
     </Page.DataContext>
-    <StackPanel Spacing="20" Width="400" Height="auto" Margin="40">
-        <TextBox Text="{Binding Nombre, Mode=TwoWay}" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0"  PlaceholderText="Nombre"></TextBox>
-        <winui:NumberBox Value="{Binding Porcentaje, Mode=TwoWay}" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Minimum="0" Maximum="100" SmallChange="1" Header="Porcentaje" SpinButtonPlacementMode="Inline"></winui:NumberBox>
-        <TextBlock FontFamily="Arial">Quien lo podra aplicar?</TextBlock>
-        <ListView  Height="auto" Width="auto" ItemsSource="{Binding Seleccionados}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel>
-                        <CheckBox FontFamily="Arial">
-                            <CheckBox.Template>
-                                <ControlTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <CheckBox IsChecked="{Binding Path=Value.Permitido, Mode=TwoWay}"></CheckBox>
-                                        <TextBlock VerticalAlignment="Center">
-                                                    <Run Text="{Binding Path=Key.Nombre}"></Run>
-                                                    <Run> (</Run>
-                                                    <Run Text="{Binding Path=Key.Puesto}"></Run>
-                                                    <Run>)</Run>
-                                        </TextBlock>
-                                    </StackPanel>
-                                </ControlTemplate>
-                            </CheckBox.Template>
-                        </CheckBox>
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-        <Button Command="{Binding NuevoDescuento}" FontFamily="Arial" HorizontalAlignment="Right" Foreground="white" Width="200" Background="#0067b8" Content="Agregar"></Button>
+    
+    <StackPanel Spacing="20" HorizontalAlignment="Stretch" Height="auto" Margin="40">
+        <TextBlock FontSize="20" Text="Agregar un nuevo descuento"/>
+        <TextBox Header="¿Que nombre lleva este descuento?" Text="{Binding Nombre, Mode=TwoWay}" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0"  PlaceholderText="Nombre"></TextBox>
+        <winui:NumberBox FontSize="14" Value="{Binding Porcentaje, Mode=TwoWay}" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Minimum="0" Maximum="100" SmallChange="1" Header="Porcentaje de descuento %" SpinButtonPlacementMode="Inline"></winui:NumberBox>
+        <Button Command="{Binding NuevoDescuento}" FontFamily="Arial" HorizontalAlignment="Stretch" Foreground="white"  Background="#32a852"  Content="Agregar"></Button>
     </StackPanel>
 </Page>

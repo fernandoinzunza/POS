@@ -1,0 +1,54 @@
+﻿<Page
+    x:Class="POS.Views.UsersList"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:POS.ViewModels"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    mc:Ignorable="d"
+    
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.DataContext>
+        <local:UsersViewModel></local:UsersViewModel> 
+    </Page.DataContext>
+    <Grid Margin="40">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Lista de usuario" FontSize="20" FontFamily="Arial"></TextBlock>
+        <TextBlock FontSize="12"  Foreground="Gray" Grid.Row="1" Grid.Column="0" Text="Puedes buscar por nombre o por numero de empleado" FontFamily="Arial"></TextBlock>
+        <controls:DataGrid Margin="0 40 0 0" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding Usuarios}" AutoGenerateColumns="False">
+            <controls:DataGrid.Columns>
+                <controls:DataGridTextColumn Header="No. Empleado" Binding="{Binding NoEmpleado}">
+                </controls:DataGridTextColumn>
+                <controls:DataGridTextColumn Header="Nombre" Binding="{Binding Nombre}">
+                </controls:DataGridTextColumn>
+                <controls:DataGridTextColumn Header="Ap Paterno" Binding="{Binding ApPaterno}">
+                </controls:DataGridTextColumn>
+                <controls:DataGridTextColumn Header="Ap Materno" Binding="{Binding ApMaterno}">
+                </controls:DataGridTextColumn>
+                <controls:DataGridTextColumn Header="Puesto" Binding="{Binding Puesto}">
+                </controls:DataGridTextColumn>
+                <controls:DataGridTextColumn Header="Usuario" Binding="{Binding NomUsuario}">
+                </controls:DataGridTextColumn>
+                <controls:DataGridTextColumn Header="Contrasena" Binding="{Binding Contrasena}">
+                </controls:DataGridTextColumn>
+                <controls:DataGridTemplateColumn Header="Accion">
+                    <controls:DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button FontFamily="Arial" Click="Button_Click" CornerRadius="0" Background="#32a852" Foreground="White" Content="Ver privilegios"></Button>
+                        </DataTemplate>
+                    </controls:DataGridTemplateColumn.CellTemplate>
+                </controls:DataGridTemplateColumn>
+            </controls:DataGrid.Columns>
+        </controls:DataGrid>
+    </Grid>
+</Page>

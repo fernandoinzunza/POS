@@ -119,21 +119,43 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CustomControls\CustomContentDialog.xaml.cs">
+      <DependentUpon>CustomContentDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\DevolucionesContentDialog.xaml.cs">
+      <DependentUpon>DevolucionesContentDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\UsuarioContentDialog.xaml.cs">
+      <DependentUpon>UsuarioContentDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Models\Articulo.cs" />
+    <Compile Include="Models\CajaDispArticulo.cs" />
+    <Compile Include="Models\CompraAProveedor.cs" />
     <Compile Include="Models\Departamento.cs" />
     <Compile Include="Models\Descuento.cs" />
     <Compile Include="Models\DescuentosPermitidos.cs" />
+    <Compile Include="Models\Devolucion.cs" />
     <Compile Include="Models\EntradaAlmacen.cs" />
+    <Compile Include="Models\EntradaGrid.cs" />
+    <Compile Include="Models\EstadisticaArticulo.cs" />
     <Compile Include="Models\Moneda.cs" />
+    <Compile Include="Models\Permisos.cs" />
     <Compile Include="Models\Proveedor.cs" />
+    <Compile Include="Models\SalidaAlmacen.cs" />
     <Compile Include="Models\Seleccionado.cs" />
+    <Compile Include="Models\TotalesCarrito.cs" />
     <Compile Include="Models\Unidad.cs" />
     <Compile Include="Models\UnidadMedida.cs" />
     <Compile Include="Models\Usuario.cs" />
+    <Compile Include="Models\Carrito.cs" />
+    <Compile Include="Models\Venta.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\AllSellsViewModel.cs" />
     <Compile Include="ViewModels\ArticleListViewModel.cs" />
     <Compile Include="ViewModels\ArticleViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\BooleanToVisibilityConverter.cs" />
+    <Compile Include="ViewModels\CrearTicket.cs" />
     <Compile Include="ViewModels\DepartmentViewModel.cs" />
     <Compile Include="ViewModels\Dependencies\FocusExtension.cs" />
     <Compile Include="ViewModels\DiscountViewModel.cs" />
@@ -145,8 +167,13 @@
     <Compile Include="ViewModels\NewArticleViewModel.cs" />
     <Compile Include="ViewModels\ProviderViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />
+    <Compile Include="ViewModels\SellViewModel.cs" />
     <Compile Include="ViewModels\StartPageViewModel.cs" />
     <Compile Include="ViewModels\StringFormatConverter.cs" />
+    <Compile Include="ViewModels\UsersViewModel.cs" />
+    <Compile Include="Views\AllSellsReport.xaml.cs">
+      <DependentUpon>AllSellsReport.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ArticleList.xaml.cs">
       <DependentUpon>ArticleList.xaml</DependentUpon>
     </Compile>
@@ -159,11 +186,17 @@
     <Compile Include="Views\DepartmentView.xaml.cs">
       <DependentUpon>DepartmentView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Devoluciones.xaml.cs">
+      <DependentUpon>Devoluciones.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DiscountList.xaml.cs">
       <DependentUpon>DiscountList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Discounts.xaml.cs">
       <DependentUpon>Discounts.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntradaPorReposicion.xaml.cs">
+      <DependentUpon>EntradaPorReposicion.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Inventory.xaml.cs">
       <DependentUpon>Inventory.xaml</DependentUpon>
@@ -171,8 +204,17 @@
     <Compile Include="Views\InventoryStocks.xaml.cs">
       <DependentUpon>InventoryStocks.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ListaReposiciones.xaml.cs">
+      <DependentUpon>ListaReposiciones.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ListaSalidas.xaml.cs">
+      <DependentUpon>ListaSalidas.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MasVendidos.xaml.cs">
+      <DependentUpon>MasVendidos.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\NewArticle.xaml.cs">
       <DependentUpon>NewArticle.xaml</DependentUpon>
@@ -189,17 +231,41 @@
     <Compile Include="Views\NewProvider.xaml.cs">
       <DependentUpon>NewProvider.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\NewUser.xaml.cs">
+      <DependentUpon>NewUser.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Providers.xaml.cs">
       <DependentUpon>Providers.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ProvidersList.xaml.cs">
       <DependentUpon>ProvidersList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ReportesVentas.xaml.cs">
+      <DependentUpon>ReportesVentas.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SalidaAlmacen.xaml.cs">
       <DependentUpon>SalidaAlmacen.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Sells.xaml.cs">
+      <DependentUpon>Sells.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\StartPage.xaml.cs">
       <DependentUpon>StartPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UnitiesList.xaml.cs">
+      <DependentUpon>UnitiesList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Users.xaml.cs">
+      <DependentUpon>Users.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UsersList.xaml.cs">
+      <DependentUpon>UsersList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VentanaDeCobro.xaml.cs">
+      <DependentUpon>VentanaDeCobro.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VentasRealizadas.xaml.cs">
+      <DependentUpon>VentasRealizadas.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -208,13 +274,59 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Cart.altform-lightunplated_targetsize-16.png" />
+    <Content Include="Assets\Cart.altform-lightunplated_targetsize-24.png" />
+    <Content Include="Assets\Cart.altform-lightunplated_targetsize-256.png" />
+    <Content Include="Assets\Cart.altform-lightunplated_targetsize-32.png" />
+    <Content Include="Assets\Cart.altform-lightunplated_targetsize-48.png" />
+    <Content Include="Assets\Cart.altform-unplated_targetsize-16.png" />
+    <Content Include="Assets\Cart.altform-unplated_targetsize-24.png" />
+    <Content Include="Assets\Cart.altform-unplated_targetsize-256.png" />
+    <Content Include="Assets\Cart.altform-unplated_targetsize-32.png" />
+    <Content Include="Assets\Cart.altform-unplated_targetsize-48.png" />
+    <Content Include="Assets\Cart.scale-100.png" />
+    <Content Include="Assets\Cart.scale-125.png" />
+    <Content Include="Assets\Cart.scale-150.png" />
+    <Content Include="Assets\cart.scale-200.png" />
+    <Content Include="Assets\Cart.scale-400.png" />
+    <Content Include="Assets\Cart.targetsize-16.png" />
+    <Content Include="Assets\Cart.targetsize-24.png" />
+    <Content Include="Assets\Cart.targetsize-256.png" />
+    <Content Include="Assets\Cart.targetsize-32.png" />
+    <Content Include="Assets\Cart.targetsize-48.png" />
+    <Content Include="Assets\LargeTile.scale-100.png" />
+    <Content Include="Assets\LargeTile.scale-125.png" />
+    <Content Include="Assets\LargeTile.scale-150.png" />
+    <Content Include="Assets\LargeTile.scale-200.png" />
+    <Content Include="Assets\LargeTile.scale-400.png" />
+    <Content Include="Assets\SmallTile.scale-100.png" />
+    <Content Include="Assets\SmallTile.scale-125.png" />
+    <Content Include="Assets\SmallTile.scale-150.png" />
+    <Content Include="Assets\SmallTile.scale-200.png" />
+    <Content Include="Assets\SmallTile.scale-400.png" />
+    <Content Include="Assets\SplashScreen.scale-100.png" />
+    <Content Include="Assets\SplashScreen.scale-125.png" />
+    <Content Include="Assets\SplashScreen.scale-150.png" />
+    <Content Include="Assets\SplashScreen.scale-400.png" />
+    <Content Include="Assets\Square150x150Logo.scale-100.png" />
+    <Content Include="Assets\Square150x150Logo.scale-125.png" />
+    <Content Include="Assets\Square150x150Logo.scale-150.png" />
+    <Content Include="Assets\Square150x150Logo.scale-400.png" />
+    <Content Include="Assets\StoreLogo.scale-100.png" />
+    <Content Include="Assets\StoreLogo.scale-125.png" />
+    <Content Include="Assets\StoreLogo.scale-150.png" />
+    <Content Include="Assets\StoreLogo.scale-200.png" />
+    <Content Include="Assets\StoreLogo.scale-400.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-100.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-125.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-150.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-400.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
     <Content Include="Assets\Square150x150Logo.scale-200.png" />
     <Content Include="Assets\Square44x44Logo.scale-200.png" />
     <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
-    <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
   </ItemGroup>
   <ItemGroup>
@@ -224,6 +336,15 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="ClosedXML">
+      <Version>0.95.4</Version>
+    </PackageReference>
+    <PackageReference Include="itext7">
+      <Version>7.1.14</Version>
+    </PackageReference>
+    <PackageReference Include="iTextSharp">
+      <Version>5.5.13.2</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore">
       <Version>3.1.10</Version>
     </PackageReference>
@@ -264,6 +385,22 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="CustomControls\CustomContentDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomControls\DevolucionesContentDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomControls\UsuarioContentDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AllSellsReport.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ArticleList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -280,11 +417,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Devoluciones.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\DiscountList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Discounts.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EntradaPorReposicion.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -296,7 +441,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\ListaReposiciones.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ListaSalidas.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\LoginView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MasVendidos.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -320,6 +477,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\NewUser.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Providers.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -328,7 +489,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\ReportesVentas.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\SalidaAlmacen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Sells.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -336,10 +505,35 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\UnitiesList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Users.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UsersList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VentanaDeCobro.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VentasRealizadas.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.manifest" />
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

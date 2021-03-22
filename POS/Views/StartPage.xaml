@@ -9,21 +9,144 @@
     FontFamily="Arial"
     
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-    <ScrollViewer>
-        <Grid Margin="200 100 200 50">
+    <Grid>
+        <VisualStateManager.VisualStateGroups >
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger  MinWindowWidth="0"></AdaptiveTrigger>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="btn1.HorizontalContentAlignment" Value="Center"></Setter>
+                        <Setter Target="btn2.HorizontalContentAlignment" Value="Center"></Setter>
+                        <Setter Target="btn3.HorizontalContentAlignment" Value="Center"></Setter>
+                        <Setter Target="btn4.HorizontalContentAlignment" Value="Center"></Setter>
+                        <Setter Target="btn5.HorizontalContentAlignment" Value="Center"></Setter>
+                        <Setter Target="btn6.HorizontalContentAlignment" Value="Center"></Setter>
+                        <Setter Target="columnaSobra.Width" Value="0"/>
+                        <Setter Target="menu.Margin" Value="0 40 0 0"></Setter>
+                        <Setter Target="btn1.(Grid.ColumnSpan)" Value="3"></Setter>
+                        <Setter Target="btn2.(Grid.ColumnSpan)" Value="3"></Setter>
+                        <Setter Target="btn3.(Grid.ColumnSpan)" Value="3"></Setter>
+                        <Setter Target="btn4.(Grid.ColumnSpan)" Value="3"></Setter>
+                        <Setter Target="btn5.(Grid.ColumnSpan)" Value="3"></Setter>
+                        <Setter Target="btn6.(Grid.ColumnSpan)" Value="3"></Setter>
+                        <Setter Target="btn1.(Grid.RowSpan)" Value="1"></Setter>
+                        <Setter Target="btn2.(Grid.RowSpan)" Value="1"></Setter>
+                        <Setter Target="btn3.(Grid.RowSpan)" Value="1"></Setter>
+                        <Setter Target="btn4.(Grid.RowSpan)" Value="1"></Setter>
+                        <Setter Target="btn5.(Grid.RowSpan)" Value="1"></Setter>
+                        <Setter Target="btn6.(Grid.RowSpan)" Value="1"></Setter>
+                        <Setter Target="btn1.(Grid.Row)" Value="0"></Setter>
+                        <Setter Target="btn2.(Grid.Row)" Value="1"></Setter>
+                        <Setter Target="btn3.(Grid.Row)" Value="2"></Setter>
+                        <Setter Target="btn4.(Grid.Row)" Value="3"></Setter>
+                        <Setter Target="btn5.(Grid.Row)" Value="4"></Setter>
+                        <Setter Target="btn6.(Grid.Row)" Value="5"></Setter>
+                        <Setter Target="btn1.(Grid.Column)" Value="0"></Setter>
+                        <Setter Target="btn2.(Grid.Column)" Value="0"></Setter>
+                        <Setter Target="btn3.(Grid.Column)" Value="0"></Setter>
+                        <Setter Target="btn4.(Grid.Column)" Value="0"></Setter>
+                        <Setter Target="btn5.(Grid.Column)" Value="0"></Setter>
+                        <Setter Target="btn6.(Grid.Column)" Value="0"></Setter>
+                        <Setter Target="txtVentana.Margin" Value=" 0 0 100 0"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="641"></AdaptiveTrigger>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="btn1.HorizontalContentAlignment" Value="Center"></Setter>
+                        <Setter Target="btn2.HorizontalContentAlignment" Value="Center"></Setter>
+                        <Setter Target="btn3.HorizontalContentAlignment" Value="Center"></Setter>
+                        <Setter Target="btn4.HorizontalContentAlignment" Value="Center"></Setter>
+                        <Setter Target="btn5.HorizontalContentAlignment" Value="Center"></Setter>
+                        <Setter Target="btn6.HorizontalContentAlignment" Value="Center"></Setter>
+                        <Setter Target="columnaSobra.Width" Value="*"/>
+                        <Setter Target="menu.Margin" Value="0 40 0 0"></Setter>
+                        <Setter Target="btn1.(Grid.ColumnSpan)" Value="2"></Setter>
+                        <Setter Target="btn2.(Grid.ColumnSpan)" Value="2"></Setter>
+                        <Setter Target="btn3.(Grid.ColumnSpan)" Value="2"></Setter>
+                        <Setter Target="btn4.(Grid.ColumnSpan)" Value="2"></Setter>
+                        <Setter Target="btn5.(Grid.ColumnSpan)" Value="2"></Setter>
+                        <Setter Target="btn6.(Grid.ColumnSpan)" Value="2"></Setter>
+                        <Setter Target="btn1.(Grid.RowSpan)" Value="2"></Setter>
+                        <Setter Target="btn2.(Grid.RowSpan)" Value="2"></Setter>
+                        <Setter Target="btn3.(Grid.RowSpan)" Value="2"></Setter>
+                        <Setter Target="btn4.(Grid.RowSpan)" Value="2"></Setter>
+                        <Setter Target="btn5.(Grid.RowSpan)" Value="2"></Setter>
+                        <Setter Target="btn6.(Grid.RowSpan)" Value="2"></Setter>
+                        <Setter Target="btn1.(Grid.Row)" Value="0"></Setter>
+                        <Setter Target="btn2.(Grid.Row)" Value="0"></Setter>
+                        <Setter Target="btn3.(Grid.Row)" Value="2"></Setter>
+                        <Setter Target="btn4.(Grid.Row)" Value="2"></Setter>
+                        <Setter Target="btn5.(Grid.Row)" Value="4"></Setter>
+                        <Setter Target="btn6.(Grid.Row)" Value="4"></Setter>
+                        <Setter Target="btn1.(Grid.Column)" Value="0"></Setter>
+                        <Setter Target="btn2.(Grid.Column)" Value="2"></Setter>
+                        <Setter Target="btn3.(Grid.Column)" Value="0"></Setter>
+                        <Setter Target="btn4.(Grid.Column)" Value="2"></Setter>
+                        <Setter Target="btn5.(Grid.Column)" Value="0"></Setter>
+                        <Setter Target="btn6.(Grid.Column)" Value="2"></Setter>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1008"></AdaptiveTrigger>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="btn1.HorizontalContentAlignment" Value="Center"></Setter>
+                        <Setter Target="menu.Margin" Value="40 40 40 0"></Setter>
+                        <Setter Target="columnaSobra.Width" Value="0"/>
+                        <Setter Target="btn1.(Grid.ColumnSpan)" Value="1"></Setter>
+                        <Setter Target="btn2.(Grid.ColumnSpan)" Value="1"></Setter>
+                        <Setter Target="btn3.(Grid.ColumnSpan)" Value="1"></Setter>
+                        <Setter Target="btn4.(Grid.ColumnSpan)" Value="1"></Setter>
+                        <Setter Target="btn5.(Grid.ColumnSpan)" Value="1"></Setter>
+                        <Setter Target="btn6.(Grid.ColumnSpan)" Value="1"></Setter>
+                        <Setter Target="btn1.(Grid.RowSpan)" Value="3"></Setter>
+                        <Setter Target="btn2.(Grid.RowSpan)" Value="3"></Setter>
+                        <Setter Target="btn3.(Grid.RowSpan)" Value="3"></Setter>
+                        <Setter Target="btn4.(Grid.RowSpan)" Value="3"></Setter>
+                        <Setter Target="btn5.(Grid.RowSpan)" Value="3"></Setter>
+                        <Setter Target="btn6.(Grid.RowSpan)" Value="3"></Setter>
+                        <Setter Target="btn1.(Grid.Row)" Value="0"></Setter>
+                        <Setter Target="btn2.(Grid.Row)" Value="0"></Setter>
+                        <Setter Target="btn3.(Grid.Row)" Value="0"></Setter>
+                        <Setter Target="btn4.(Grid.Row)" Value="3"></Setter>
+                        <Setter Target="btn5.(Grid.Row)" Value="3"></Setter>
+                        <Setter Target="btn6.(Grid.Row)" Value="3"></Setter>
+                        <Setter Target="btn1.(Grid.Column)" Value="0"></Setter>
+                        <Setter Target="btn2.(Grid.Column)" Value="1"></Setter>
+                        <Setter Target="btn3.(Grid.Column)" Value="2"></Setter>
+                        <Setter Target="btn4.(Grid.Column)" Value="0"></Setter>
+                        <Setter Target="btn5.(Grid.Column)" Value="1"></Setter>
+                        <Setter Target="btn6.(Grid.Column)" Value="2"></Setter>
+                        <Setter Target="txtVentana.Margin" Value=" 0 0 0 0"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+    <ScrollViewer Margin="0 32 0 0">
+        
+        <Grid x:Name="menu" Margin="200 100 200 50" ScrollViewer.VerticalScrollMode="Auto">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition x:Name="columnaSobra" Width="0"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition ></RowDefinition>
                 <RowDefinition ></RowDefinition>
-
+                <RowDefinition ></RowDefinition>
+                <RowDefinition ></RowDefinition>
+                <RowDefinition ></RowDefinition>
+                <RowDefinition ></RowDefinition>
             </Grid.RowDefinitions>
-
-            <Button Command="{Binding InventoryPage}"  FontSize="30" Background="white" Foreground="SkyBlue"  Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" Height="300">
-                <Grid ColumnSpacing="10">
+            <Button x:Name="btn1" Grid.RowSpan="3" FontFamily="Arial" Command="{Binding InventoryPage}"  FontSize="30" Background="white" Foreground="#79d279"  Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <Grid ColumnSpacing="10" >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
@@ -38,7 +161,7 @@
                     </StackPanel>
                 </Grid>
             </Button>
-            <Button  FontSize="30" Background="white" Foreground="SkyBlue"  Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" Height="300">
+            <Button x:Name="btn2" Grid.RowSpan="3" Click="btn2_Click"  FontFamily="Arial"  FontSize="30" Background="white" Foreground="#79d279"  Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <Grid ColumnSpacing="10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"></RowDefinition>
@@ -50,11 +173,11 @@
                     <TextBlock Grid.Row="0" Grid.Column="0"><Run Text="&#xEC59;" FontSize="70" FontFamily="Segoe MDL2 Assets" /></TextBlock>
                     <StackPanel Grid.Row="0" Grid.Column="1">
                         <TextBlock FontSize="16" Foreground="Black">Ventana de cobro</TextBlock>
-                        <TextBlock  FontSize="12" Foreground="Gray" TextWrapping="Wrap" >Realizar una venta, facturar</TextBlock>
+                        <TextBlock  FontSize="12" Foreground="Gray" TextWrapping="Wrap" x:Name="txtVentana" Text="Realizar una venta" Margin="0 0 00 0"></TextBlock>
                     </StackPanel>
                 </Grid>
             </Button>
-            <Button  FontSize="30" Background="white" Foreground="SkyBlue"  Grid.Row="0" Grid.Column="2" HorizontalAlignment="Stretch" Height="300">
+            <Button x:Name="btn3" Grid.RowSpan="3"   FontFamily="Arial" Command="{Binding Ventas}"   FontSize="30" Background="white" Foreground="#79d279"  Grid.Row="0" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <Grid ColumnSpacing="10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"></RowDefinition>
@@ -70,7 +193,7 @@
                     </StackPanel>
                 </Grid>
             </Button>
-            <Button  Command="{Binding ProviderPage}" FontSize="30" Background="white" Foreground="SkyBlue"  Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" Height="300">
+            <Button x:Name="btn4" Grid.RowSpan="3"  FontFamily="Arial" Command="{Binding ProviderPage}" FontSize="30" Background="white" Foreground="#79d279"  Grid.Row="3" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <Grid ColumnSpacing="10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"></RowDefinition>
@@ -86,7 +209,7 @@
                     </StackPanel>
                 </Grid>
             </Button>
-            <Button  Command="{Binding NavigationCommand}"  FontSize="30" Background="white" Foreground="SkyBlue"  Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" Height="300">
+            <Button x:Name="btn5" Grid.RowSpan="3"   FontFamily="Arial" Command="{Binding NavigationCommand}"  FontSize="30" Background="white" Foreground="#79d279"  Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <Grid ColumnSpacing="10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"></RowDefinition>
@@ -103,7 +226,7 @@
 
                 </Grid>
             </Button>
-            <Button  FontSize="30" Background="white" Foreground="SkyBlue"  Grid.Row="1" Grid.Column="2" HorizontalAlignment="Stretch" Height="300">
+            <Button x:Name="btn6" Grid.RowSpan="3"  Command="{Binding UsersPage}" FontFamily="Arial" FontSize="30" Background="white" Foreground="#79d279"  Grid.Row="3" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <Grid ColumnSpacing="10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"></RowDefinition>
@@ -112,13 +235,26 @@
                         <ColumnDefinition Width="*"></ColumnDefinition>
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Row="0" Grid.Column="0"><Run Text="&#xEF40;" FontSize="70" FontFamily="Segoe MDL2 Assets" /></TextBlock>
+                    <TextBlock Grid.Row="0" Grid.Column="0"><Run Text="&#xE716;" FontSize="70" FontFamily="Segoe MDL2 Assets" /></TextBlock>
                     <StackPanel Grid.Row="0" Grid.Column="1">
-                        <TextBlock FontSize="16" Foreground="Black">Metodos de pago</TextBlock>
-                        <TextBlock  FontSize="12" Foreground="Gray" TextWrapping="Wrap" >TIpo de cambio, tarjetas de credito o debito</TextBlock>
+                        <TextBlock FontSize="16" Foreground="Black">Usuarios</TextBlock>
+                        <TextBlock  FontSize="12" Foreground="Gray" TextWrapping="Wrap" >Dar o quitar permisos a usuarios</TextBlock>
                     </StackPanel>
                 </Grid>
             </Button>
-        </Grid>
+                
+            </Grid>
     </ScrollViewer>
+        <Grid x:Name="TitleBar" VerticalAlignment="Top">
+            <!--Add a rectangle here-->
+            <Rectangle x:Name="BackgroundElement" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <AppBarButton Icon="Back" Background="#32a852" Command="{Binding CerrarSesion}" Foreground="White" Label="Salir"></AppBarButton>
+            </Grid>
+        </Grid>
+    </Grid>
 </Page>

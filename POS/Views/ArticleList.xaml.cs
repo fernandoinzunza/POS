@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using POS.Models;
+using System.Net.Http;
 // La plantilla de elemento Página en blanco está documentada en https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace POS.Views
@@ -22,19 +23,35 @@ namespace POS.Views
     /// <summary>
     /// Una página vacía que se puede usar de forma independiente o a la que se puede navegar dentro de un objeto Frame.
     /// </summary>
+    ///
+   
     public sealed partial class ArticleList : Page
     {
+        public List<Descuento> ListaDescuentos { get; set; }
+        HttpClient httpClient;
+        ArticleListViewModel vm;
         public ArticleList()
         {
             this.InitializeComponent();
-
+            ListaDescuentos = new List<Descuento>();
+            vm = new ArticleListViewModel();
+            this.DataContext = vm;
+            ListaDescuentos = vm.GetDescuentos();
         }
 
 
 
         private void TextBox_KeyUp(object sender, KeyRoutedEventArgs e)
         {
-
+            var textBox = sender as TextBox;
+            if (textBox.Text == "")
+            {
+                vm.Articulos = new System.Collections.ObjectModel.ObservableCollection<Articulo>(vm.AuxArticulos);
+            }
+            else
+            {
+                vm.Articulos = new System.Collections.ObjectModel.ObservableCollection<Articulo>(vm.Articulos.Where(b => b.Clave.Contains(textBox.Text) || b.Descripcion.ToUpper().Contains(textBox.Text.ToUpper())).ToList());
+            }
         }
 
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -64,6 +81,20 @@ namespace POS.Views
                 lvi.ContentTemplate = (DataTemplate)this.Resources["Normal"];
             else
                 lvi.ContentTemplate = (DataTemplate)this.Resources["Detail"];
+        }
+
+        private void btnEliminar_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = sender as Button;
+            var articulo = btn.DataContext as Articulo;
+            vm.EliminarFunction(articulo);
+        }
+
+        private void btnEditar_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = sender as Button;
+            var articulo = btn.DataContext as Articulo;
+            vm.EditarFunction(articulo);
         }
     }
 }

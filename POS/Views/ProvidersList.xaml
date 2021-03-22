@@ -26,34 +26,34 @@
                 </TextBox>
             </Grid>
 
-            <controls:DataGrid FontFamily="Arial" HorizontalScrollBarVisibility="Auto" Margin="0 40 0 0" AlternatingRowBackground="LightGray" AutoGenerateColumns="False" x:Name="dataGrid" ItemsSource="{Binding Proveedores}">
+            <controls:DataGrid BorderBrush="Gray" BorderThickness="2" GridLinesVisibility="All"  FontFamily="Arial" HorizontalScrollBarVisibility="Auto" Margin="0 40 0 0" AlternatingRowBackground="LightGray" AutoGenerateColumns="False" x:Name="dataGrid" ItemsSource="{Binding Proveedores,Mode=TwoWay}">
                 <controls:DataGrid.Columns>
-                    <controls:DataGridTextColumn Header="Id" IsReadOnly="True"  Binding="{Binding Id}">
+                    <controls:DataGridTextColumn Header="Id" IsReadOnly="True"  Binding="{Binding Key.Id}">
                     </controls:DataGridTextColumn>
-                    <controls:DataGridTextColumn Header="Nombre" Binding="{Binding Nombre}">
+                    <controls:DataGridTextColumn Header="Nombre" Binding="{Binding Key.Nombre}">
                     </controls:DataGridTextColumn>
-                    <controls:DataGridTextColumn Header="Razon Social" Binding="{Binding RazonSocial}">
+                    <controls:DataGridTextColumn Header="Razon Social" Binding="{Binding Key.RazonSocial}">
                     </controls:DataGridTextColumn>
-                    <controls:DataGridTextColumn Header="RFC" Binding="{Binding Rfc}">
+                    <controls:DataGridTextColumn Header="RFC" Binding="{Binding Key.Rfc}">
                     </controls:DataGridTextColumn>
-                    <controls:DataGridTextColumn Header="Nombre de contacto" Binding="{Binding Contacto}">
+                    <controls:DataGridTextColumn Header="Nombre de contacto" Binding="{Binding Key.Contacto}">
                     </controls:DataGridTextColumn>
-                    <controls:DataGridTextColumn Header="Telefono" Binding="{Binding Telefono}">
+                    <controls:DataGridTextColumn Header="Telefono" Binding="{Binding Key.Telefono}">
                     </controls:DataGridTextColumn>
-                    <controls:DataGridTextColumn Header="Correo" Binding="{Binding Correo}">
+                    <controls:DataGridTextColumn Header="Correo" Binding="{Binding Key.Correo}">
                     </controls:DataGridTextColumn>
                    
                     <controls:DataGridTemplateColumn Header="Accion">
                         <controls:DataGridTemplateColumn.CellEditingTemplate>
                             <DataTemplate>
-                                <Button Content="Eliminar" Background="Red" Margin="4" HorizontalAlignment="Stretch" FontSize="10" Foreground="White" Command="{Binding Eliminar}" CommandParameter="{Binding}"/>
+                                <Button Content="Eliminar" CornerRadius="0" Background="#f54242" Margin="4" HorizontalAlignment="Stretch" FontSize="10" Foreground="White" Command="{Binding Value[0]}" CommandParameter="{Binding}"/>
                             </DataTemplate>
                         </controls:DataGridTemplateColumn.CellEditingTemplate>
                     </controls:DataGridTemplateColumn>
                     <controls:DataGridTemplateColumn Header="Accion">
                         <controls:DataGridTemplateColumn.CellEditingTemplate>
                             <DataTemplate>
-                                <Button Content="Editar"  Background="Blue" HorizontalAlignment="Stretch"  Margin="4" FontSize="10" Foreground="White" Command="{Binding Editar}" CommandParameter="{Binding}"/>
+                                <Button Content="Editar" CornerRadius="0"  Background="#32a852" HorizontalAlignment="Stretch"  Margin="4" FontSize="10" Foreground="White" Command="{Binding Value[1]}" CommandParameter="{Binding}"/>
                             </DataTemplate>
                         </controls:DataGridTemplateColumn.CellEditingTemplate>
                     </controls:DataGridTemplateColumn>

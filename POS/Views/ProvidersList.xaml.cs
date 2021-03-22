@@ -27,7 +27,7 @@ namespace POS.Views
         {
             this.InitializeComponent();
             var vm = new ProviderViewModel();
-            DataContext = vm;
+            this.DataContext = vm;
         }
 
         private void TextBox_KeyUp(object sender, KeyRoutedEventArgs e)

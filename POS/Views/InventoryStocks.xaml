@@ -19,62 +19,75 @@
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Row="0" Grid.Column="0">
-                    <TextBlock FontFamily="Arial"  FontSize="17">Lista de articulos</TextBlock>
+                    <TextBlock FontFamily="Arial"  FontSize="17">Stock de articulos disponible</TextBlock>
                     <TextBlock FontFamily="Arial" Foreground="DarkGray" FontSize="10">Puede buscar por cualquier columna de la tabla</TextBlock>
                 </StackPanel>
-                
+                <TextBox CornerRadius="0" BorderBrush="Gray" BorderThickness="2" FontFamily="Arial" Grid.Row="0" Grid.Column="1" x:Name="buscarStock" PlaceholderText="Buscar:" KeyUp="TextBox_KeyUp"></TextBox>
             </Grid>
 
-            <controls:DataGrid FontFamily="Arial" AlternatingRowBackground="LightGray" AutoGenerateColumns="False" x:Name="dataGrid" ItemsSource="{Binding Colores}">
+            <controls:DataGrid RowHeight="60" Margin="0 40 0 0" ColumnWidth="auto" HorizontalScrollBarVisibility="Auto" BorderBrush="Gray" BorderThickness="2" GridLinesVisibility="All"  FontFamily="Arial" AlternatingRowBackground="LightGray" AutoGenerateColumns="False" x:Name="dataGrid" ItemsSource="{Binding Disponibilidad}">
+                <controls:DataGrid.RowDetailsTemplate>
+                    <DataTemplate>
+                        <controls:DataGrid ColumnWidth="*"  AutoGenerateColumns="False" ItemsSource="{Binding Value}">
+                            <controls:DataGrid.Columns>
+                                <controls:DataGridTextColumn Header="Capacidad" Binding="{Binding Capacidad}"/>
+                                <controls:DataGridTextColumn Header="Cajas disponibles" Binding="{Binding CajasDisponibles}"/>
+                                <controls:DataGridTextColumn Header="Fuera de caja" Binding="{Binding StockIndividual}"/>
+                                <controls:DataGridTextColumn Header="Costo" Binding="{Binding PrecioXCaja}"/>
+                                <controls:DataGridTextColumn Header="Precio unitario" Binding="{Binding PrecioUnitarioArt}"/>
+                                <controls:DataGridTextColumn Header="Stock total" Binding="{Binding StockTotal}"/>
+                            </controls:DataGrid.Columns>
+                        </controls:DataGrid>
+                    </DataTemplate>
+                </controls:DataGrid.RowDetailsTemplate>
                 <controls:DataGrid.Columns>
-                    <controls:DataGridTemplateColumn
-                    Header="Name"
-                    Width="SizeToHeader">
-
+                    <controls:DataGridTemplateColumn>
                         <controls:DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate >
-                                <Border Background="{Binding Value}">
-                                    <TextBlock Text="{Binding Key.Clave}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <DataTemplate>
+                                <Border Background="{Binding Key.Value}">
+                                    <TextBlock Foreground="White" Text="{Binding Key.Key.Clave}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
                             </DataTemplate>
                         </controls:DataGridTemplateColumn.CellTemplate>
-
                     </controls:DataGridTemplateColumn>
-                    <controls:DataGridTextColumn Header="Descripcion" Binding="{Binding Key.Descripcion}">
+                    <controls:DataGridTextColumn Header="Descripcion" Binding="{Binding Key.Key.Descripcion}">
                     </controls:DataGridTextColumn>
-                    <controls:DataGridTextColumn Header="Departamento" Binding="{Binding Key.Departamento}">
+                    <controls:DataGridTextColumn Header="Departamento" Binding="{Binding Key.Key.Departamento}">
                     </controls:DataGridTextColumn>
-                    <controls:DataGridTextColumn Header="Proveedor" Binding="{Binding Key.NombreProveedor}">
+                    <controls:DataGridTextColumn Header="Unidad" Binding="{Binding Key.Key.Unidad}">
                     </controls:DataGridTextColumn>
-                    <controls:DataGridTextColumn Header="Stock" Binding="{Binding Key.Stock}">
+                    <controls:DataGridTextColumn Header="Stock bajo considerado" Binding="{Binding Key.Key.StockBajo}">
                     </controls:DataGridTextColumn>
-                    <controls:DataGridTextColumn Header="Unidad" Binding="{Binding Key.Unidad}">
-                    </controls:DataGridTextColumn>
-                    <controls:DataGridTextColumn Header="Precio publico" Binding="{Binding Key.PrecioPublico}">
-                    </controls:DataGridTextColumn>
-                    <controls:DataGridTextColumn Header="Precio secundario" Binding="{Binding Key.PrecioSecundario}">
-                    </controls:DataGridTextColumn>
-                    <controls:DataGridTextColumn Header="Precio al mayoreo" Binding="{Binding Key.PrecioMayoreo}">
-                    </controls:DataGridTextColumn>
-                    <controls:DataGridTextColumn Header="Precio al costo" Binding="{Binding Key.PrecioAlCosto}">
-                    </controls:DataGridTextColumn>
-                    <controls:DataGridTemplateColumn Header="Accion">
-                        <controls:DataGridTemplateColumn.CellEditingTemplate>
+                    <controls:DataGridTemplateColumn Header="Abrir/Cerrar detalles">
+                        <controls:DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Content="Eliminar" Background="Red" Margin="4" HorizontalAlignment="Stretch" FontSize="10" Foreground="White"/>
+                                <Button HorizontalAlignment="Center" x:Name="btnDetalles" Click="btnDetalles_Click" ToolTipService.ToolTip="Abrir/Cerrar detalles" Margin="2" CornerRadius="0">
+                                    <SymbolIcon x:Name="icono" Symbol="View"/>
+                                </Button>
                             </DataTemplate>
-                        </controls:DataGridTemplateColumn.CellEditingTemplate>
-                    </controls:DataGridTemplateColumn>
-                    <controls:DataGridTemplateColumn Header="Accion">
-                        <controls:DataGridTemplateColumn.CellEditingTemplate>
-                            <DataTemplate>
-                                <Button Content="Editar"  Background="Blue" HorizontalAlignment="Stretch"  Margin="4" FontSize="10" Foreground="White"/>
-                            </DataTemplate>
-                        </controls:DataGridTemplateColumn.CellEditingTemplate>
+                        </controls:DataGridTemplateColumn.CellTemplate>
                     </controls:DataGridTemplateColumn>
                 </controls:DataGrid.Columns>
             </controls:DataGrid>
-
+            <StackPanel Margin="40 40 40 0" Spacing="10">
+                <TextBlock Text="Semaforo de stocks"/>
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                    <Rectangle HorizontalAlignment="Left" Fill="#f54242" Width="20" Height="20"></Rectangle>
+                    <TextBlock VerticalAlignment="Center" FontSize="10" Text="Stock bajo"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                    <Rectangle HorizontalAlignment="Left" Fill="#ff8533" Width="20" Height="20"></Rectangle>
+                    <TextBlock VerticalAlignment="Center" FontSize="10" Text="Un poco arriba del stock bajo"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                    <Rectangle HorizontalAlignment="Left" Fill="#ffff33" Width="20" Height="20"></Rectangle>
+                    <TextBlock VerticalAlignment="Center" FontSize="10" Text="Stock ni tan alto ni tan bajo"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                    <Rectangle HorizontalAlignment="Left" Fill="#2eb82e" Width="20" Height="20"></Rectangle>
+                    <TextBlock VerticalAlignment="Center" FontSize="10" Text="Stock alto"/>
+                </StackPanel>
+            </StackPanel>
         </StackPanel>
     </ScrollViewer>
 </Page>

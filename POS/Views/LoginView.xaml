@@ -8,6 +8,10 @@
     mc:Ignorable="d"
     Background="GhostWhite"
     FontFamily="Arial">
+    <Page.Resources>
+        <local:BooleanToVisibilityConverter x:Key="bool2vis"/>
+        <local:BooleanToVisibilityConverter x:Key="bool2visInverse" OnTrue="Collapsed" OnFalse="Visible"/>
+    </Page.Resources>
     <Grid Background="White"  Margin="40"  Height="400" Width="400">
 
         <Grid.RowDefinitions>
@@ -15,10 +19,20 @@
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <TextBlock   Margin="20"  Grid.Row="0" FontWeight="SemiBold">Iniciar Sesion</TextBlock>
-        <TextBox FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Margin="20 20 20 0" Grid.Row="1" PlaceholderText="Usuario" Text="{Binding Usuario, Mode=TwoWay}"></TextBox>
-        <PasswordBox FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Margin="20" Grid.Row="2"  PlaceholderText="Contrasena" Password="{Binding Contrasena, Mode=TwoWay}"></PasswordBox>
-        <Button FontFamily="Arial" Grid.Row="3" Background="#0067b8" Foreground="White" Width="200" x:Name="btnLogin" Content="Entrar" HorizontalAlignment="Right" Margin="0 0 20 10" Command="{Binding Login}" ></Button>
+        <TextBlock Margin="20"  Grid.Row="0" FontWeight="SemiBold">Iniciar Sesion</TextBlock>
+        <TextBox  FocusVisualPrimaryBrush="#8cd98c" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Margin="20 20 20 0" Grid.Row="1" PlaceholderText="Usuario" Text="{Binding Usuario, Mode=TwoWay}">
+        </TextBox>
+        <PasswordBox IsPasswordRevealButtonEnabled="True" FontFamily="Arial" BorderBrush="Gray" BorderThickness="2" CornerRadius="0" Margin="20" Grid.Row="2"  PlaceholderText="Contrasena" Password="{Binding Contrasena, Mode=TwoWay}"></PasswordBox>
+        <TextBlock Visibility="{Binding Path=Incorrecto, 
+            Converter={StaticResource bool2vis}}" Margin="20 5 20 5" Grid.Row="3" Foreground="Red" Text="Usuario o contraseña incorrectos!"></TextBlock>
+        <Button  FontFamily="Arial" Grid.Row="4" CornerRadius="0" Background="#32a852" Foreground="White" Width="200" x:Name="btnLogin" HorizontalAlignment="Right" Margin="0 0 20 10" Command="{Binding Login}" >
+            <StackPanel>
+                <ProgressRing Visibility="{Binding Path=IsBusy,Converter={StaticResource ResourceKey=bool2vis}}" Foreground="White" IsActive="{Binding IsBusy}"></ProgressRing>
+                <TextBlock Visibility="{Binding Path=TextVisible, 
+            Converter={StaticResource bool2vis}}" Text="Entrar"></TextBlock>
+            </StackPanel>
+        </Button>
     </Grid>
 </Page>

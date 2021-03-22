@@ -10,38 +10,62 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
-        <winui:NavigationView SelectionChanged="rootNavigationView_SelectionChanged" BackRequested="rootNavigationView_BackRequested" Grid.Row="0" IsTitleBarAutoPaddingEnabled="False"  x:Name="rootNavigationView" Background="Transparent" IsBackButtonVisible="Auto" IsBackEnabled="True" IsSettingsVisible="False" PaneDisplayMode="Left">
+        <winui:NavigationView Loaded="rootNavigationView_Loaded" SelectionChanged="rootNavigationView_SelectionChanged" BackRequested="rootNavigationView_BackRequested" Grid.Row="0" IsTitleBarAutoPaddingEnabled="False"  x:Name="rootNavigationView" Background="Transparent" IsBackButtonVisible="Auto" IsBackEnabled="True" IsSettingsVisible="False" PaneDisplayMode="Auto">
             <winui:NavigationView.Resources>
-                <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="#0377fc"/>
-                <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="#0377fc" />
+                <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="#32a852"/>
+                <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="#32a852" />
                 <SolidColorBrush x:Key="NavigationViewItemForeground" Color="White"/>
                 <SolidColorBrush x:Key="NavigationViewItemForegroundSelected" Color="White"/>
                 <SolidColorBrush x:Key="NavigationViewItemForegroundPointerOver" Color="White"/>
-                <SolidColorBrush Color="#73aff5" x:Key="NavigationViewItemBackgroundSelected"/>
-                <SolidColorBrush x:Key="NavigationViewItemBackgroundPointerOver" Color="#4790e6"/>
+                <SolidColorBrush Color="#79d279" x:Key="NavigationViewItemBackgroundSelected"/>
+                <SolidColorBrush x:Key="NavigationViewItemBackgroundPointerOver" Color="#79d279"/>
                 <SolidColorBrush x:Key="NavigationViewItemForegroundSelectedPointerOver" Color="White"/>
+                <SolidColorBrush x:Key="NavigationViewSelectionIndicatorForeground" Color="#39ac39"/>
+                <SolidColorBrush x:Key="SystemControlForegroundBaseHighBrush" Color="White"></SolidColorBrush>
             </winui:NavigationView.Resources>
+            <winui:NavigationView.PaneToggleButtonStyle>
+                <Style TargetType="Button" BasedOn="{StaticResource PaneToggleButtonStyle}">
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="Background" Value="#32a852"/>
+                </Style>
+            </winui:NavigationView.PaneToggleButtonStyle>
             <winui:NavigationView.MenuItems>
-                <winui:NavigationViewItem Content="Agregar una entrada" Icon="Add" Tag="NewEntry" />
-                <winui:NavigationViewItem Content="Ver stocks" Tag="InventoryStocks">
+                <winui:NavigationViewItem Content="Agregar una entrada" x:Name="nuevaEntrada" Icon="Add" Tag="NewEntry" />
+                <winui:NavigationViewItem Content="Agregar una entrada por reposición" x:Name="entradaPorReposicion" Tag="EntradaPorReposicion">
+                    <winui:NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE72C;"/>
+                    </winui:NavigationViewItem.Icon>
+                </winui:NavigationViewItem>
+                <winui:NavigationViewItem Content="Registrar una salida" x:Name="nuevaSalida" Tag="SalidaAlmacen">
+                    <winui:NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE709;"/>
+                    </winui:NavigationViewItem.Icon>
+                </winui:NavigationViewItem>
+                <winui:NavigationViewItem Content="Ver stocks" x:Name="verStocks" Tag="InventoryStocks">
                     <winui:NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE728;"/>
                     </winui:NavigationViewItem.Icon>
                 </winui:NavigationViewItem>
                 <winui:NavigationViewItem Icon="View" Content="Bitacoras" Tag="">
                     <winui:NavigationViewItem.MenuItems>
-                        <winui:NavigationViewItem Content="Entradas realizadas"  Tag="ComprasAlmacen">
+                        <winui:NavigationViewItem x:Name="bitacoraEntradas" Content="Entradas realizadas"  Tag="ComprasAlmacen">
                             <winui:NavigationViewItem.Icon>
                                 <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE898;"/>
                             </winui:NavigationViewItem.Icon>
                         </winui:NavigationViewItem>
-                        <winui:NavigationViewItem Content="Salidas realizadas" Tag="SalidaAlmacen">
+                        <winui:NavigationViewItem x:Name="bitacoraSalidas" Content="Salidas realizadas" Tag="ListaSalidas">
                             <winui:NavigationViewItem.Icon>
-                                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE709;"/>
+                                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE896;"/>
+                            </winui:NavigationViewItem.Icon>
+                        </winui:NavigationViewItem>
+                        <winui:NavigationViewItem Content="Entradas por reposicion" Tag="ListaReposiciones">
+                            <winui:NavigationViewItem.Icon>
+                                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE72C;"/>
                             </winui:NavigationViewItem.Icon>
                         </winui:NavigationViewItem>
                     </winui:NavigationViewItem.MenuItems>

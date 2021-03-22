@@ -1,0 +1,102 @@
+﻿<Page
+    x:Class="POS.Views.EntradaPorReposicion"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:POS.ViewModels"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:winui="using:Microsoft.UI.Xaml.Controls"
+    mc:Ignorable="d"  
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.DataContext>
+        <local:InventoryViewModel></local:InventoryViewModel> 
+    </Page.DataContext>
+    <Grid>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0"></AdaptiveTrigger>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="el1.(Grid.Row)" Value="0"/>
+                        <Setter Target="el2.(Grid.Row)" Value="1"/>
+                        <Setter Target="el3.(Grid.Row)" Value="2"/>
+                        <Setter Target="el4.(Grid.Row)" Value="3"/>
+                        <Setter Target="el5.(Grid.Row)" Value="4"/>
+                        <Setter Target="el6.(Grid.Row)" Value="5"/>
+                        <Setter Target="el7.(Grid.Row)" Value="6"/>
+                        <Setter Target="el8.(Grid.Row)" Value="7"/>
+                        <Setter Target="el1.(Grid.Column)" Value="0"/>
+                        <Setter Target="el2.(Grid.Column)" Value="0"/>
+                        <Setter Target="el3.(Grid.Column)" Value="0"/>
+                        <Setter Target="el4.(Grid.Column)" Value="0"/>
+                        <Setter Target="el5.(Grid.Column)" Value="0"/>
+                        <Setter Target="el6.(Grid.Column)" Value="0"/>
+                        <Setter Target="el7.(Grid.Column)" Value="0"/>
+                        <Setter Target="el8.(Grid.Column)" Value="0"/>
+                        <Setter Target="el1.(Grid.ColumnSpan)" Value="2"/>
+                        <Setter Target="el2.(Grid.ColumnSpan)" Value="2"/>
+                        <Setter Target="el3.(Grid.ColumnSpan)" Value="2"/>
+                        <Setter Target="el4.(Grid.ColumnSpan)" Value="2"/>
+                        <Setter Target="el5.(Grid.ColumnSpan)" Value="2"/>
+                        <Setter Target="el6.(Grid.ColumnSpan)" Value="2"/>
+                        <Setter Target="el7.(Grid.ColumnSpan)" Value="2"/>
+                        <Setter Target="el8.(Grid.ColumnSpan)" Value="2"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="641"></AdaptiveTrigger>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters></VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1008"></AdaptiveTrigger>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters></VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <TextBlock x:Name="el1" FontFamily="Arial" Margin="40 40 40 0" Grid.Row="0" Grid.Column='0' FontSize="20" Text="Entrada por reposicion"></TextBlock>
+        <TextBlock x:Name="el2" FontFamily="Arial" Margin="40 0 40 0" Grid.Row="1" Grid.Column='0' FontSize="12" Foreground="Gray" Text="Selecciona la informacion a continuacion:"></TextBlock>
+        <ComboBox x:Name="el3"  SelectedItem="{Binding FacturaSeleccionada,Mode=TwoWay}" ItemsSource="{Binding ListaFacturas}" CornerRadius="0" HorizontalAlignment="Stretch" BorderBrush="Gray" BorderThickness="2" IsTextSearchEnabled="True" FontFamily="Arial" Margin="40 0 40 0" Grid.Row="2" Grid.Column="0" Header="¿De que factura viene?" PlaceholderText="No. Factura"></ComboBox>
+        <ComboBox x:Name="el4" SelectedItem="{Binding ArticuloSeleccionado,Mode=TwoWay}"  ItemsSource="{Binding ArticulosPorFactura}" CornerRadius="0" HorizontalAlignment="Stretch" BorderBrush="Gray" BorderThickness="2" IsTextSearchEnabled="True" FontFamily="Arial" Margin="40 0 40 0" Grid.Row="2" Grid.Column="1" Header="¿Que articulo es?" PlaceholderText="Articulo">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Articulo}"></TextBlock>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <ComboBox x:Name="el5" ItemsSource="{Binding CajasCompradas}" SelectedItem="{Binding CajaSeleccionada,Mode=TwoWay}" CornerRadius="0" HorizontalAlignment="Stretch" BorderBrush="Gray" BorderThickness="2" IsTextSearchEnabled="True" FontFamily="Arial" Margin="40 0 40 0" Grid.Row="3" Grid.Column="0" Header="¿De que caja(s) salio?" PlaceholderText="Capacidad y precio">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock>
+                        <Run Text="Capacidad: "></Run>
+                        <Run Text="{Binding UnidadesXCaja}"></Run> 
+                        <Run Text="y precio $: "></Run>
+                        <Run Text="{Binding PrecioXCaja}"></Run>
+                    </TextBlock>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <winui:NumberBox ValidationMode="InvalidInputOverwritten" x:Name="el6" Margin="40 0 40 0" FontSize="14" Value="{Binding CajasAReponer,Mode=TwoWay}" FontFamily="Arial" CornerRadius="0"  Grid.Row="3" BorderBrush="Gray" BorderThickness="2" Grid.Column="1" Header="Cajas a reponer" SpinButtonPlacementMode="Inline"></winui:NumberBox>
+        <winui:NumberBox ValidationMode="InvalidInputOverwritten" x:Name="el7" SpinButtonPlacementMode="Inline" Value="{Binding UnidadesAReponer,Mode=TwoWay}" FontSize="14" FontFamily="Arial" Margin="40 0 40 0" CornerRadius="0" Header="Unidades a reponer" Grid.Row="4" Grid.Column="0"></winui:NumberBox>
+        <Button x:Name="el8" Command="{Binding NuevaEntradaPorReposicion}" CornerRadius="0" Background="#32a852" Margin="40 40 40 0" HorizontalAlignment="Stretch" Foreground="White" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Content="Agregar"></Button>
+    </Grid>
+</Page>
